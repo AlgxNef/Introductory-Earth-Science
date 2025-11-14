@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@theme {
+  --font-serif: Noto Serif JP Variable, ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Noto Sans JP";
+}
+
+p{
+	font-family: "Noto Serif JP";
+	margin: 0.1em 0;
+}
+
+/* KaTeXのブロック数式(.katex-display)のスタイルをproseの対象外にする */
+.katex-display {
+	font: 1.05em / 1.2 KaTeX_Main, Times New Roman, serif !important;
+  display: block;
+  margin: 1em 0;
+  text-align: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* KaTeXのインライン数式(.katex)のスタイルをproseの対象外にする */
+.katex {
+	font: 1.11em / 1.2 KaTeX_Main, Times New Roman, serif !important;
+  display: inline-block;
+  white-space: nowrap;
+  margin: 0 0.2em;
+  font-size: 1.05em;
+}
+
+/* KaTeX内の特定の要素にproseのスタイルが適用されないようにリセット */
+/* これが最も重要な部分です */
+.katex span,
+.katex-display span,
+.katex-html span {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  line-height: initial;
+  color: inherit; /* `prose`の色を継承しないようにする */
+  font-weight: inherit; /* `prose`の太字設定を継承しないようにする */
+}
+
+/* Tippy.jsのWikipedia風カスタムテーマ */
+.tippy-box[data-theme~='light-border'] {
+  background-color: white;
+  color: black;
+  border: 1px solid #a2a9b1;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.tippy-box[data-theme~='light-border'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #a2a9b1;
+}
+.tippy-box[data-theme~='light-border'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #a2a9b1;
+}
+/* 脚注定義の戻りリンク（例: [↩]）を非表示にする */
+.footnote-backref {
+  display: none;
+}
+
+/* 本文中の脚注参照リンクのスタイル */
+/* proseクラス内のsupタグの中にあるaタグを対象 */
+.prose sup a {
+  @apply no-underline text-blue-600 font-bold bg-blue-50 rounded-sm px-1 text-xs align-top;
+  top: -0.2em; /* 上付き文字の位置を微調整 */
+}
+
+/* 脚注リスト自体のスタイル調整 */
+.footnotes {
+  @apply mt-12 pt-6 border-t;
+}
+.footnotes ol {
+  @apply pl-4;
+}
+.footnotes li {
+  @apply mb-2;
+}
