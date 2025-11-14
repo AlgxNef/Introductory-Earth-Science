@@ -92,7 +92,6 @@ export default async function PostPage({ params }: Props) {
       answerHtml = transformQuestions(rawAnswerHtml);
     }
     // --- ここまで ---
-		console.log(mainContent);
     return (
       <div className="min-h-screen p-4">
         <div className="mx-auto p-4 sm:p-6 lg:p-8 bg-white rounded-b-lg">

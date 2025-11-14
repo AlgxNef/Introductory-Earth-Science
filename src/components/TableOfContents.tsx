@@ -11,13 +11,11 @@ const TocList = ({ nodes }: { nodes: TocNode[] }) => {
       {nodes.map((node) => (
         <li key={node.id} className="mt-1">
           {node.url ? (
-            <Link href={node.url} className="hover:text-blue-600 transition-colors">
-              {/* 変更点: title -> displayTitle */}
-              {node.displayTitle}
+            <Link href={node.url} className="text-gray-700 hover:text-black  transition-colors">
+              ▶ {node.displayTitle}
             </Link>
           ) : (
             <span className="font-semibold text-gray-800">
-              {/* 変更点: title -> displayTitle */}
               {node.displayTitle}
             </span>
           )}
@@ -34,7 +32,7 @@ export const TableOfContents = ({ tocData }: { tocData: TocNode[] }) => {
       {/* <ul>のスタイルを調整 */}
       <ul className="list-none">
         {tocData.map((node) => (
-          <li key={node.id} className="mt-2">
+          <li key={node.id} className="p-2">
             <span className="font-bold text-lg text-gray-900">{node.displayTitle}</span>
             <TocList nodes={node.children} />
           </li>

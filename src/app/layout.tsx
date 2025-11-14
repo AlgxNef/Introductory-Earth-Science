@@ -35,11 +35,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ja" className={`${newCM10.variable} ${newCMMath.variable}`}>
       <body>
         <div className="flex">
-          <aside className="w-80 h-screen p-4 border-r fixed overflow-y-auto bg-gray-50">
-            {/* --- ★★★ 2. サイドバーのタイトルを新しいものに更新 ★★★ --- */}
-            <div className="mb-6 pb-4 border-b">
+          <aside className="absolute w-80 h-screen border-r fixed overflow-y-auto bg-gray-50 print:hidden">
+            <div className="relative sticky top-0 p-2 border-b border-black bg-slate-700 text-white">
               <Link href="/" className="group">
-                <h1 className="text-2xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
+                <h1 className="text-2xl font-bold group-hover:font-[font-serif] transition-colors text-center">
                   理系地学入門
                 </h1>
               </Link>
@@ -47,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <TableOfContents tocData={tocData} />
           </aside>
 
-          <main className="ml-80 flex-1 p0">
+          <main className="ml-80 print:m-0 flex-1 p0">
             {children}
           </main>
         </div>

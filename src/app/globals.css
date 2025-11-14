@@ -40,8 +40,7 @@ p{
   display: block;
   margin: 1em 0;
   text-align: center;
-  overflow-x: auto;
-  overflow-y: hidden;
+	overflow: hidden;
 }
 
 /* KaTeXのインライン数式(.katex)のスタイルをproseの対象外にする */
