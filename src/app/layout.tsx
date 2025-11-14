@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="ja" className={`${newCM10.variable} ${newCMMath.variable}`}>
-      <body>
+      <body className="text-black bg-white">
         <div className="flex">
           <aside className="absolute w-80 h-screen border-r fixed overflow-y-auto bg-gray-50 print:hidden">
             <div className="relative sticky top-0 p-2 border-b border-black bg-slate-700 text-white">

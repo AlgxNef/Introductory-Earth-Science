@@ -818,7 +818,7 @@ const formulasData: FormulaCardProps[] = [
 export default function HomePage() {
   return (
     <div>
-			<div className="flex w-[70%] mx-auto p-8 text-3xl justify-between">
+			<div className="flex w-fit mx-auto p-8 text-xl text-slate-800 justify-between">
 				<div className="bg-slate-200 py-4 px-8">地球</div>
 				<div className="bg-slate-200 py-4 px-8">生命</div>
 				<div className="bg-slate-200 py-4 px-8">海洋</div>
@@ -827,7 +827,7 @@ export default function HomePage() {
 				<div className="bg-slate-200 py-4 px-8">銀河</div>
 				<div className="bg-slate-200 py-4 px-8">天文</div>
 			</div>
-      <div className="px-10 pb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="px-10 pb-10 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-3">
         {formulasData.map((formula) => (
           <FormulaCard key={formula.title} {...formula} />
         ))}
