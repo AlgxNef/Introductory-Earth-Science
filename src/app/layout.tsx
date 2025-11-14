@@ -14,14 +14,14 @@ export const metadata: Metadata = {
   },
   // 長い方の説明文
   description: 'Webで読める理系地学に関わる知識本。物理・化学の法則をもとに、広大なスケールと先人の知恵を線でつなぎます。',
+		icons: {
+			icon: '/favicon.ico', // publicフォルダからのパス
+		},
   openGraph: {
     title: '理系地学集成',
     // SNSシェア用には短い方の説明文
     description: 'Webで読める理系地学に関わる知識本。物理・化学の法則をもとに、広大なスケールと先人の知恵を線でつなぎます。',
     url: 'https://i-earth.pages.dev/',
-		icons: {
-			icon: '/favicon.ico', // publicフォルダからのパス
-		},
     siteName: '理系地学入門',
     locale: 'ja_JP',
     type: 'website',
