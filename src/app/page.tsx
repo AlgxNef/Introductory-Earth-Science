@@ -1,5 +1,13 @@
 import Link from 'next/link';
 import { BlockMath, InlineMath } from 'react-katex';
+import { 
+	GiEarthAfricaEurope, 
+	GiDna2,
+	GiBigWave,
+	GiSunCloud,
+	GiSolarSystem,
+	GiGalaxy,
+} from "react-icons/gi";
 
 // =================================================================
 // 1. 各数式を表示するためのカードコンポーネント
@@ -14,7 +22,7 @@ interface FormulaCardProps {
 
 const FormulaCard = ({ title, formula, supplement, symbols, link }: FormulaCardProps) => {
   return (
-    <Link href={link} className="block group">
+    <Link href={link} className="block group" id={title}>
       <div className="flex flex-col h-full border bg-white text-black p-4 shadow-sm hover:bg-slate-100  transition-all duration-300 flex flex-col">
         {/* タイトル */}
         <div className="text-xl font-bold text-gray-800 h-fit">
@@ -813,25 +821,51 @@ const formulasData: FormulaCardProps[] = [
 ];
 
 // =================================================================
-// 3. メインページ本体
+// 3. メインページ本体 (アイコンナビゲーション付き)
 // =================================================================
 export default function HomePage() {
+  const navItems = [
+    { label: '地球', icon: <GiEarthAfricaEurope />, href: '#万有引力' },
+    { label: '生命', icon: <GiDna2 />, href: '#life' },
+    { label: '海洋', icon: <GiBigWave />, href: '#ocean' },
+    { label: '大気', icon: <GiSunCloud />, href: '#atmosphere' },
+    { label: '太陽系', icon: <GiSolarSystem />, href: '#solar-system' },
+    { label: '天文', icon: <GiGalaxy />, href: '#astronomy' },
+  ];
+
   return (
-    <div>
-			<div className="flex w-fit mx-auto p-8 text-xl text-slate-800 justify-between">
-				<div className="bg-slate-200 py-4 px-8">地球</div>
-				<div className="bg-slate-200 py-4 px-8">生命</div>
-				<div className="bg-slate-200 py-4 px-8">海洋</div>
-				<div className="bg-slate-200 py-4 px-8">大気</div>
-				<div className="bg-slate-200 py-4 px-8">太陽系</div>
-				<div className="bg-slate-200 py-4 px-8">銀河</div>
-				<div className="bg-slate-200 py-4 px-8">天文</div>
-			</div>
-      <div className="px-10 pb-10 grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-3">
+    // ページ全体のコンテナ。右側のナビゲーションバーの幅を考慮してpaddingを追加
+    <div className="pr-24">
+      {/* 数式カードを並べるコンテナ */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         {formulasData.map((formula) => (
           <FormulaCard key={formula.title} {...formula} />
         ))}
       </div>
+
+      {/* 
+        右側固定ナビゲーションバー
+        - w-24: 幅を固定 (96px)
+        - h-screen: 高さを画面いっぱい
+        - top-0 right-0 fixed: 画面の右上に固定
+        - flex flex-col: 子要素を縦に並べる
+        - print:hidden: 印刷時には非表示にする
+      */}
+      <nav className="fixed top-0 right-0 flex flex-col h-screen w-24 bg-slate-100 print:hidden">
+        {navItems.map((item) => (
+          <a
+            key={item.label}
+            href={item.href}
+            className="flex flex-col items-center justify-center flex-1 w-full text-slate-700 hover:bg-slate-300 hover:text-slate-900 transition-colors duration-200"
+            title={item.label} // マウスオーバーでツールチップ表示
+          >
+            {/* アイコン部分 (サイズを調整) */}
+            <span className="text-4xl mb-1">{item.icon}</span>
+            {/* テキスト部分 (サイズを調整) */}
+            <span className="text-xs font-medium">{item.label}</span>
+          </a>
+        ))}
+      </nav>
     </div>
   );
 }

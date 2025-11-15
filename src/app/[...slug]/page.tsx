@@ -93,7 +93,7 @@ export default async function PostPage({ params }: Props) {
     }
     // --- ここまで ---
     return (
-      <div className="min-h-screen p-4">
+      <div className="bg-white text-black min-h-screen p-4">
         <div className="mx-auto p-4 sm:p-6 lg:p-8 bg-white rounded-b-lg">
           <header className="mb-4 border-b pb-2">
             <div className="flex justify-between items-center text-sm text-gray-500">

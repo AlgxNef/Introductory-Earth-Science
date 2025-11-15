@@ -137,8 +137,8 @@ export const transformContent = (content: string): string => {
       // 新しいflexレイアウトのHTMLを構築
       // 元の<p>タグが持っていた属性(例: class="...")を新しい<p>タグに引き継ぐ
       return `<div class="flex items-start my-2">
-  <div class="w-[80%] pr-4  flex flex-col justify-between leading-7" style="height: -webkit-fill-available;"><p${pAttributes}>${textContent}</p></div>
-  <div class="w-[20%]">${allImages}</div>
+  <div class="w-[75%] pr-4  flex flex-col justify-between leading-7" style="height: -webkit-fill-available;"><p${pAttributes}>${textContent}</p></div>
+  <div class="w-[25%]">${allImages}</div>
 </div>`;
     }
     

@@ -1,6 +1,6 @@
 # [Introductory Earth Science - 理系地学入門](http://localhost:4500)
 
-This is a Next.js project for "Introductory Earth Science," a comprehensive online reference for science-based geology. The content is written in Markdown and statically generated for high performance.
+This is a Next.js project for "Introductory Earth Science," a comprehensive online reference for science-based geoscience. The content is written in Markdown and statically generated for high performance. It uses KaTeX, a fast, high-quality mathematical formula rendering library, to render mathematical formulas on the server side to minimize latency, while using the Image component to automatically improve website performance and user experience. By placing the aside tag on the left and leaving the rest as the main text, the layout is neat and easy to read. This online reference stands out from the rest: Introductory Earth Science.
 
 ## Project Workflow
 
