@@ -826,8 +826,8 @@ const formulasData: FormulaCardProps[] = [
 export default function HomePage() {
   const navItems = [
     { label: '地球', icon: <GiEarthAfricaEurope />, href: '#万有引力' },
-    { label: '生命', icon: <GiDna2 />, href: '#life' },
-    { label: '海洋', icon: <GiBigWave />, href: '#ocean' },
+    { label: '生命', icon: <GiDna2 />, href: '#' },
+    { label: '海洋', icon: <GiBigWave />, href: '#' },
     { label: '大気', icon: <GiSunCloud />, href: '#atmosphere' },
     { label: '太陽系', icon: <GiSolarSystem />, href: '#solar-system' },
     { label: '天文', icon: <GiGalaxy />, href: '#astronomy' },
@@ -835,7 +835,7 @@ export default function HomePage() {
 
   return (
     // ページ全体のコンテナ。右側のナビゲーションバーの幅を考慮してpaddingを追加
-    <div className="pr-24">
+    <div className="pr-24 bg-white text-black">
       {/* 数式カードを並べるコンテナ */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
         {formulasData.map((formula) => (
