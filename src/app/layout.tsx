@@ -44,6 +44,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </Link>
             </div>
             <TableOfContents tocData={tocData} />
+            <nav className="relative sticky bottom-0 px-3 py-1 border-t border-black text-right">
+              <ul>
+                <li className="mt-1">
+                  <Link href="/about" className="text-gray-600 hover:text-blue-600">
+                    このサイトについて
+                  </Link>
+                </li>
+                <li className="mt-1">
+                  <Link href="/how-to-use" className="text-gray-600 hover:text-blue-600">
+                    サイトの使い方
+                  </Link>
+                </li>
+                <li className="mt-1">
+                  <Link href="/references" className="text-gray-600 hover:text-blue-600">
+                    引用ポリシー
+                  </Link>
+                </li>
+              </ul>
+            </nav>
           </aside>
 
           <main className="ml-80 print:m-0 flex-1 p0">
