@@ -33,6 +33,42 @@ const GeoscienceEducationAnalysis = () => {
     { subject: '生物基礎', rate: 26.3 },
     { subject: '地学基礎', rate: 27.6 },
   ];
+
+	// 令和5年度公立高等学校における教育課程の編成・実施状況調査の結果について（全日制・普通科等）より作成
+	// 参照: https://www.mext.go.jp/content/20240626-mxt_kyoiku01-000036713_02.pdf
+
+	const basicSubjectsOffering1 = [
+		{ subject: '物理基礎', rate: 30.7 },
+		{ subject: '化学基礎', rate: 48.8 },
+		{ subject: '生物基礎', rate: 59.2 },
+		{ subject: '地学基礎', rate: 7.1 },
+	];
+	
+	const basicSubjectsOffering2 = [
+		{ subject: '物理基礎', rate: 57.7 },
+		{ subject: '化学基礎', rate: 48.2 },
+		{ subject: '生物基礎', rate: 37.7 },
+		{ subject: '地学基礎', rate: 36.5 },
+	];
+	
+	const specializedSubjectsOffering3 = [
+		{ subject: '物理', rate: 81.0 },
+		{ subject: '化学', rate: 78.2 },
+		{ subject: '生物', rate: 87.7 },
+		{ subject: '地学', rate: 7.4 },
+	];
+
+	const gradeOfferingData = [
+		{ subject: '物理基礎', grade1: 30.7, grade2: 57.7, grade3: 9.2 },
+		{ subject: '化学基礎', grade1: 48.8, grade2: 48.2, grade3: 15.0 },
+		{ subject: '生物基礎', grade1: 59.2, grade2: 37.7, grade3: 18.1 },
+		{ subject: '地学基礎', grade1: 7.1, grade2: 36.5, grade3: 15.6 },
+		{ subject: '物理', grade1: 0.0, grade2: 43.3, grade3: 81.0 },
+		{ subject: '化学', grade1: 0.0, grade2: 57.7, grade3: 78.2 },
+		{ subject: '生物', grade1: 0.0, grade2: 47.5, grade3: 87.7 },
+		{ subject: '地学', grade1: 0.0, grade2: 1.5, grade3: 7.4 },
+	];
+
 	const nationalUniversityGeo = [
 		["北海道大学", "https://www.hokudai.ac.jp/admission/faculty/general/"],
 		["弘前大学", "https://nyushi.hirosaki-u.ac.jp/faculty/requirements/"],
@@ -342,11 +378,11 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-6xl mx-auto px-4 py-12">
         <header className="mb-12">
-          <h1 className="text-4xl font-bold text-slate-900 text-center mb-4">
+          <h1 className="text-4xl font-bold text-slate-900 text-center mb-4 dark:text-gray-400">
             「地学」の現状
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400">
-						　「地学」は「地球科学」の略称であり，地球を構成する物質（鉱物、岩石）から、大気、海洋、地球内部構造、さらには地球環境に影響を与える宇宙（天文学）まで、地球科学全般にわたる分野を対象とする学問である。「理系地学」とは，主として国公立大学の理系学部を受験する際に選択可能な，高校理科の専門科目「地学」を指す。現在，「地学」という語は主に文系志望者が選択する「地学基礎」の文脈で使用されるケースが多い。したがって専門科目としての地学を呼称する場合，物理や化学，生物と違って大学入学における受験者数が少ないため，地学基礎と区別する目的で「理系地学」と呼ばれることが多い。
+						　「地学」は「地球科学」の略称であり，地球を構成する物質（鉱物、岩石）から、大気、海洋、地球内部構造、さらには地球環境に影響を与える宇宙（天文学）まで、地球科学全般にわたる分野を対象とする学問である。「理系地学」とは，主として国公立大学の理系学部を受験する際に選択可能な，高校理科の専門科目「地学」を指す。現在，物理や化学，生物と違って大学入学における受験者数が少ないため，「地学」という語は主に文系志望者が選択する「地学基礎」の文脈で使用されるケースが多い。したがって専門科目としての地学を呼称する場合，地学基礎と区別する目的で「理系地学」と呼ばれる。
 					</p>
           <p className="text-lg text-gray-600 dark:text-gray-400">
             　以下では高等学校および大学入試における地学教育の定量的評価を行った。教科を選択することができる高等学校における教育・選択のあり方，あるいは大学入試の実情は，直接的に大学における地球ないし海洋・大気・宇宙に関わる研究への意識，または現実社会において地球に関わる定量的なものの見方に関連し得る。あくまで様々な要素が重なったということを念頭におく必要があるが，次のような分析が得られる。
@@ -485,97 +521,125 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
         </section>
 
         {/* セクション3: 高校における履修率 */}
-        <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-            3. 高等学校における地学関連科目の履修率
-          </h2>
-          <p className="text-gray-700 dark:text-gray-300 mb-6">
-            平成27年度（2015年度）公立高等学校調査に基づく「地学基礎」および「地学」の履修率データを示す。
-          </p>
-
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">基礎科目履修率比較（2014年度）</h3>
-              <div className="h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={basicSubjectsComparison} layout="vertical">
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis type="number" domain={[0, 100]} />
-                    <YAxis type="category" dataKey="subject" width={80} />
-                    <Tooltip />
-										<Bar dataKey="rate" name="履修率(%)">
-											{basicSubjectsComparison.map((entry, index) => (
+				<section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+					<h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+						Ⅲ 高等学校における理科科目の開設状況（学年別）
+					</h2>
+					<p className="text-gray-700 dark:text-gray-300 mb-6">
+						令和5年度（2023年度）公立高等学校における教育課程の編成・実施状況調査の結果に基づく、普通科等における理科基礎科目および理科専門科目の学年別開設状況。
+					</p>
+					
+					<div className="grid md:grid-cols-3 gap-2 mb-6">
+						<div>
+							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">1年次 基礎科目</h3>
+							<div className="h-64">
+								<ResponsiveContainer width="100%" height="100%">
+									<BarChart data={basicSubjectsOffering1} layout="vertical" margin={{ left: 10, right: 20 }}>
+										<CartesianGrid strokeDasharray="3 3" />
+										<XAxis type="number" domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
+										<YAxis type="category" dataKey="subject" width={100} />
+										<Tooltip formatter={(value: number) => [`${value}%`, '開設率']} />
+										<Bar dataKey="rate" name="開設率(%)">
+											{basicSubjectsOffering1.map((entry, index) => (
+												// 基礎科目を地学基礎を強調する色分けに調整
 												<Cell key={`cell-${index}`} fill={COLORS[index]} />
 											))}
 										</Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+									</BarChart>
+								</ResponsiveContainer>
+							</div>
+						</div>
+						
+						<div>
+							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">2年次 基礎科目</h3>
+							<div className="h-64">
+								<ResponsiveContainer width="100%" height="100%">
+									<BarChart data={basicSubjectsOffering2} layout="vertical" margin={{ left: 10, right: 20 }}>
+										<CartesianGrid strokeDasharray="3 3" />
+										<XAxis type="number" domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
+										<YAxis type="category" dataKey="subject" width={100} />
+										<Tooltip formatter={(value: number) => [`${value}%`, '開設率']} />
+										<Bar dataKey="rate" name="開設率(%)">
+											{basicSubjectsOffering2.map((entry, index) => (
+												// 基礎科目を地学基礎を強調する色分けに調整
+												<Cell key={`cell-${index}`} fill={COLORS[index]} />
+											))}
+										</Bar>
+									</BarChart>
+								</ResponsiveContainer>
+							</div>
+						</div>
+						
+						<div>
+							<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">3年次 専門科目</h3>
+							<div className="h-64">
+								<ResponsiveContainer width="100%" height="100%">
+									<BarChart data={specializedSubjectsOffering3} layout="vertical" margin={{ left: 10, right: 20 }}>
+										<CartesianGrid strokeDasharray="3 3" />
+										<XAxis type="number" domain={[0, 100]} tickFormatter={(value) => `${value}%`} />
+										<YAxis type="category" dataKey="subject" width={100} />
+										<Tooltip formatter={(value: number) => [`${value}%`, '開設率']} />
+										<Bar dataKey="rate" name="開設率(%)">
+											{specializedSubjectsOffering3.map((entry, index) => (
+												// 基礎科目を地学基礎を強調する色分けに調整
+												<Cell key={`cell-${index}`} fill={COLORS[index]} />
+											))}
+										</Bar>
+									</BarChart>
+								</ResponsiveContainer>
+							</div>
+						</div>
+					</div>
 
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">地学科目の履修率</h3>
-              <div className="space-y-4">
-                <div className="p-4 bg-gray-100 dark:bg-gray-700 rounded">
-                  <div className="text-sm text-gray-600 dark:text-gray-400">地学基礎</div>
-                  <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">26.9%</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-500 mt-1">約3.7人に1人</div>
-                </div>
-                <div className="p-4 bg-red-100 dark:bg-red-900/20 rounded">
-                  <div className="text-sm text-gray-600 dark:text-gray-400">地学</div>
-                  <div className="text-3xl font-bold text-red-600 dark:text-red-400">0.8%</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-500 mt-1">約125人に1人</div>
-                </div>
-              </div>
-            </div>
-          </div>
+					<div className="overflow-x-auto">
+						<table className="w-full text-sm border-collapse">
+							<caption className="text-left text-gray-600 dark:text-gray-400 mb-2 text-xs">
+								表：理科科目開設状況の学年別比較（2023年度入学者対象データ）
+							</caption>
+							<thead className="bg-gray-100 dark:bg-gray-700">
+								<tr>
+									<th className="border border-gray-300 dark:border-gray-600 p-2 text-left">科目</th>
+									<th className="border border-gray-300 dark:border-gray-600 p-2">1年次 開設率 (%)</th>
+									<th className="border border-gray-300 dark:border-gray-600 p-2">2年次 開設率 (%)</th>
+									<th className="border border-gray-300 dark:border-gray-600 p-2">3年次 開設率 (%)</th>
+								</tr>
+							</thead>
+							<tbody>
+								{gradeOfferingData.map((item, index) => (
+									<tr key={item.subject} className="text-center hover:bg-gray-50 dark:hover:bg-gray-700/50">
+										<td className={`border border-gray-300 dark:border-gray-600 p-2 text-left font-semibold ${item.subject.includes('基礎') || item.subject.includes('人間生活') ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''}`}>
+											{item.subject}
+										</td>
+										<td className="border border-gray-300 dark:border-gray-600 p-2">
+											{item.grade1}%
+										</td>
+										<td className="border border-gray-300 dark:border-gray-600 p-2">
+											{item.grade2}%
+										</td>
+										<td className="border border-gray-300 dark:border-gray-600 p-2">
+											{item.grade3}%
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse">
-              <caption className="text-left text-gray-600 dark:text-gray-400 mb-2 text-xs">
-                表：理科基礎科目履修率の比較（2014年度データ）
-              </caption>
-              <thead className="bg-gray-100 dark:bg-gray-700">
-                <tr>
-                  <th className="border border-gray-300 dark:border-gray-600 p-2">科目</th>
-                  <th className="border border-gray-300 dark:border-gray-600 p-2">履修率</th>
-                  <th className="border border-gray-300 dark:border-gray-600 p-2">地学基礎との差</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="text-center">
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">化学基礎</td>
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">94.6%</td>
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">+67.0ポイント</td>
-                </tr>
-                <tr className="text-center">
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">物理基礎</td>
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">30.4%</td>
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">+2.8ポイント</td>
-                </tr>
-                <tr className="text-center">
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">地学基礎</td>
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">27.6%</td>
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">—</td>
-                </tr>
-                <tr className="text-center">
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">生物基礎</td>
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">26.3%</td>
-                  <td className="border border-gray-300 dark:border-gray-600 p-2">-1.3ポイント</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded">
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">データからわかること</h3>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
-              <li>化学基礎の履修率94.6%に対し、地学基礎は27.6%と約3.4倍の差が存在する</li>
-              <li>専門科目「地学」の履修率0.8%は、基礎科目「地学基礎」の履修率26.9%の約1/34に相当する</li>
-              <li>2015年度データでも地学の履修率は0.8%であり、時系列的に改善が見られない</li>
-            </ul>
-          </div>
-        </section>
+					<div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded">
+						<h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">データからわかること</h3>
+						<ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+							<li>
+								1年次における基礎科目の開設状況は「生物基礎」（{basicSubjectsOffering1.find(d => d.subject === '生物基礎')?.rate}％）が最も高く、「地学基礎」（{basicSubjectsOffering1.find(d => d.subject === '地学基礎')?.rate}％）が最も低い。
+							</li>
+							<li>
+								特に1年次での「生物基礎」と「地学基礎」の開設率には、約{((basicSubjectsOffering1.find(d => d.subject === '生物基礎')?.rate || 0) / (basicSubjectsOffering1.find(d => d.subject === '地学基礎')?.rate || 1)).toFixed(1)}倍の大きな差がある。
+							</li>
+							<li>
+								専門科目である「物理」「化学」「生物」は主に2年次以降に開設されるが、「地学」の開設率は最も高い3年次でも{gradeOfferingData.find(d => d.subject === '地学')?.grade3}%と、他の専門科目と比べて極端に低い。
+							</li>
+						</ul>
+					</div>
+				</section>
 
         {/* セクション4: 大学入試における採用状況 */}
         <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
