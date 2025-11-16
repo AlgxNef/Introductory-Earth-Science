@@ -97,7 +97,11 @@ const GeoscienceEducationAnalysis = () => {
 	 * @param {string} title - グラフのタイトル
 	 * @param {Array<{subject: string, rate: number}>} data - グラフデータ
 	 */
-	const SubjectBarChart = ({ title, data }) => (
+	interface SubjectBarChartProps {
+		title: string;
+		data: { subject: string; rate: number }[];
+	}
+	const SubjectBarChart: React.FC<SubjectBarChartProps> = ({ title, data }) => (
 			<div>
 					<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{title}</h3>
 					<div className="h-64">
