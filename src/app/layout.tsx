@@ -5,6 +5,7 @@ import { getTableOfContents } from '@/lib/posts';
 import { TableOfContents } from '@/components/TableOfContents';
 import 'katex/dist/katex.min.css';
 import { newCM10, newCMMath } from './fonts';
+import Image from 'next/image';
 
 // --- ★★★ 1. サイトのメタデータを新しいものに更新 ★★★ ---
 export const metadata: Metadata = {
@@ -15,12 +16,14 @@ export const metadata: Metadata = {
   // 長い方の説明文
   description: 'Webで読める理系地学に関わる知識本。物理・化学の法則をもとに、広大なスケールと先人の知恵を線でつなぎます。',
 		icons: {
-			icon: '/favicon.ico', // publicフォルダからのパス
+			icon: [
+				{ url: '/icon/LogoWhite.svg', type: 'image/svg+xml' }
+			],
 		},
   openGraph: {
-    title: '理系地学集成',
+    title: '理系地学入門',
     // SNSシェア用には短い方の説明文
-    description: 'Webで読める理系地学に関わる知識本。物理・化学の法則をもとに、広大なスケールと先人の知恵を線でつなぎます。',
+    description: 'Webで読める理系地学の知識本。物理・化学の法則をもとに、広大なスケールと先人の知恵を線でつなぎます。',
     url: 'https://i-earth.pages.dev/',
     siteName: '理系地学入門',
     locale: 'ja_JP',
@@ -30,7 +33,6 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const tocData = getTableOfContents();
-
   return (
     <html lang="ja" className={`${newCM10.variable} ${newCMMath.variable}`}>
       <body className="text-black bg-white">
@@ -38,9 +40,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <aside className="absolute w-80 h-screen border-r fixed overflow-y-auto bg-gray-50 print:hidden">
             <div className="relative sticky top-0 p-2 border-b border-black bg-slate-700 text-white">
               <Link href="/" className="group">
-                <h1 className="text-2xl font-bold group-hover:font-[font-serif] transition-colors text-center">
-                  理系地学入門
-                </h1>
+                <div className="">
+                  <h1 className="text-2xl font-semibold text-white text-center hover:font-bold transition-all duration-300">理系地学入門</h1>
+                </div>
               </Link>
             </div>
             <TableOfContents tocData={tocData} />
