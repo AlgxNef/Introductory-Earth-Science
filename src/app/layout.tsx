@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: 'Webで読める理系地学に関わる知識本。物理・化学の法則をもとに、広大なスケールと先人の知恵を線でつなぎます。',
 		icons: {
 			icon: [
-				{ url: '/icon/LogoWhite.svg', type: 'image/svg+xml' }
+				{ url: '/icon/Logo.svg', type: 'image/svg+xml' }
 			],
 		},
   openGraph: {
