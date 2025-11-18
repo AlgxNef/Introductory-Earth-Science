@@ -103,7 +103,7 @@ const GeoscienceEducationAnalysis = () => {
 	}
 	const SubjectBarChart: React.FC<SubjectBarChartProps> = ({ title, data }) => (
 			<div>
-					<h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">{title}</h3>
+					<h3 className="text-lg font-semibold text-gray-900  mb-3">{title}</h3>
 					<div className="h-64">
 							<ResponsiveContainer width="100%" height="100%">
 									<BarChart data={data} layout="vertical" margin={{ left: 10, right: 20 }}>
@@ -530,37 +530,37 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
   const COLORS = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b'];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 ">
       <div className="max-w-6xl mx-auto px-4 py-4">
         <header className="py-8">
-          <h1 className="text-4xl font-bold text-slate-900 text-center mb-4 dark:text-gray-400">
+          <h1 className="text-4xl font-bold text-slate-900 text-center mb-4 ">
             理系地学入門とは
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
+          <p className="text-lg text-gray-600 ">
 						　「地学」は「地球科学」の略称であり，地球を構成する物質（鉱物，岩石）から，大気，海洋，地球内部構造，さらには地球環境に影響を与える宇宙（天文学）まで，地球科学全般にわたる分野を対象とする学問である。「理系地学」とは，主として国公立大学の理系学部を受験する際に選択可能な，高校理科の専門科目「地学」を指す。現在，物理や化学，生物と違って大学入学における受験者数が少ないため，「地学」という語は主に文系志望者が選択する「地学基礎」の文脈で使用されるケースが多い。したがって専門科目としての地学を呼称する場合，地学基礎と区別する目的で「理系地学」と呼ばれる。本サイトの設立趣旨に代えて，次のようなデータを示す。
 					</p>
         </header>
 				
 
         {/* セクション1: 高校教員採用率 */}
-				<section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-						<h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+				<section className="bg-white  rounded-lg shadow-md p-6 mb-8">
+						<h2 className="text-2xl font-semibold text-gray-900  mb-4">
 								Ⅰ　高校教員採用試験における理科（地学）の募集状況
 						</h2>
 						
-						<p className="text-gray-700 dark:text-gray-300 py-4"> 情報誌教員養成セミナー記載の各年度の全国実施内容一覧に基づく，教員採用試験高校理科を募集しているものの，募集教科に「地学」がない（「理科（物理・化学・生物）」などの記載がある）都道府県市（2024年度は{total2024}，2025年度は{total2025}の自治体が対象）の数。66の自治体のうち，高校理科教員の採用を行っていない自治体，および「理科」単独，または「物理・化学・生物・地学」などの表記をしている自治体を除外することで計上した。
+						<p className="text-gray-700  py-4"> 情報誌教員養成セミナー記載の各年度の全国教員採用試験実施内容一覧に基づく，高校理科の教員を募集しているものの，募集教科に「地学」のない（「理科（物理・化学・生物）」など）都道府県市（2024年度は{total2024}，2025年度は{total2025}の自治体が対象）の数。「理科」単独，または「物理・化学・生物・地学」などの表記をしている自治体を除外することで計上。
 						</p>
 
 						<div className="grid md:grid-cols-2 gap-6">
 								{/* 2024年度版の分析結果 */}
-								<div className="p-6 bg-red-50 dark:bg-red-900/20 rounded-lg">
-										<div className="text-sm text-gray-600 dark:text-gray-400 mb-2">2024年度版（2023年夏実施）</div>
-										<div className="text-xl font-bold text-red-700 dark:text-red-300 mb-3">地学教員を募集しない自治体数</div>
-										<div className="text-5xl font-bold text-red-600 dark:text-red-400 mb-2">{excluded2024}<span className="text-2xl mx-1">自治体</span></div>
-										<div className="text-2xl text-gray-700 dark:text-gray-300">/ {total2024}自治体</div>
-										<div className="text-sm text-gray-500 dark:text-gray-500 mt-4">不実施率: <span className="text-lg font-semibold">{excludedRate2024}</span> ％</div>
+								<div className="p-6 bg-red-50  rounded-lg">
+										<div className="text-sm text-gray-600  mb-2">2024年度版（2023年夏実施）</div>
+										<div className="text-xl font-bold text-red-700  mb-3">地学教員を募集しない自治体数</div>
+										<div className="text-5xl font-bold text-red-600  mb-2">{excluded2024}<span className="text-2xl mx-1">自治体</span></div>
+										<div className="text-2xl text-gray-700 ">/ {total2024}自治体</div>
+										<div className="text-sm text-gray-500  mt-4">不実施率: <span className="text-lg font-semibold">{excludedRate2024}</span> ％</div>
 										
-										<h4 className="mt-4 text-sm font-semibold text-red-700 dark:text-red-300 border-t border-red-300 dark:border-red-700 pt-3">【地学教員を募集しない自治体】</h4>
+										<h4 className="mt-4 text-sm font-semibold text-red-700  border-t border-red-300  pt-3">【地学教員を募集しない自治体】</h4>
 										<div className="text-xs">
 												{excludedList2024.map((name, index) => (
 														<React.Fragment key={name}>
@@ -572,14 +572,14 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 								</div>
 
 								{/* 2025年度版の分析結果 */}
-								<div className="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-										<div className="text-sm text-gray-600 dark:text-gray-400 mb-2">2025年度版（2024年夏実施）</div>
-										<div className="text-xl font-bold text-blue-700 dark:text-blue-300 mb-3">地学教員を募集しない自治体数</div>
-										<div className="text-5xl font-bold text-blue-600 dark:text-blue-400 mb-2">{excluded2025}<span className="text-2xl mx-1">自治体</span></div>
-										<div className="text-2xl text-gray-700 dark:text-gray-300">/ {total2025}自治体</div>
-										<div className="text-sm text-gray-500 dark:text-gray-500 mt-4">不実施率: <span className="text-lg font-semibold">{excludedRate2025}</span> ％</div>
+								<div className="p-6 bg-blue-50  rounded-lg">
+										<div className="text-sm text-gray-600  mb-2">2025年度版（2024年夏実施）</div>
+										<div className="text-xl font-bold text-blue-700  mb-3">地学教員を募集しない自治体数</div>
+										<div className="text-5xl font-bold text-blue-600  mb-2">{excluded2025}<span className="text-2xl mx-1">自治体</span></div>
+										<div className="text-2xl text-gray-700 ">/ {total2025}自治体</div>
+										<div className="text-sm text-gray-500  mt-4">不実施率: <span className="text-lg font-semibold">{excludedRate2025}</span> ％</div>
 										
-										<h4 className="mt-4 text-sm font-semibold text-blue-700 dark:text-blue-300 border-t border-blue-300 dark:border-blue-700 pt-3">【地学教員を募集しない自治体】</h4>
+										<h4 className="mt-4 text-sm font-semibold text-blue-700  border-t border-blue-300  pt-3">【地学教員を募集しない自治体】</h4>
 										<div className="text-xs">
 												{excludedList2025.map((name, index) => (
 														<React.Fragment key={name}>
@@ -592,14 +592,14 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 						</div>
 						
 						<div className="p-2">
-							<p className="text-left text-gray-600 dark:text-gray-400 text-xs">
+							<p className="text-left text-gray-600  text-xs">
 								古い情報・誤情報が含まれる場合がありますので<strong className="text-red-600 font-sans">採用試験を受ける際などは必ず各自治体の募集要項などを確認し</strong>，このデータは参考程度にとどめてください。
 							</p>
 						</div>
 
-						<div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded">
-						<h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">データからわかること</h3>
-								<ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+						<div className="p-4 bg-blue-50  rounded">
+						<h3 className="font-semibold text-gray-900  mb-2">データからわかること</h3>
+								<ul className="list-disc list-inside text-gray-700  space-y-1">
 										<li>「理科」のみ記載がある場合も多く，残りの自治体で必ずしも地学教員として従事できるとは限らない</li>
 										<li>5の自治体（神奈川県/静岡県/京都市/長崎県/宮崎県）は2024年度には地学教員（理科としての採用を含む）採用枠があったが，2025年度にはなくなり，一方で4の自治体（青森県/滋賀県/香川県/熊本県）では2024年度の採用枠はなかったが2025年度に採用枠が設けられた
 </li>
@@ -609,11 +609,11 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 				</section>
 
         {/* セクション2: 高校における履修率 */}
-				<section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-					<h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+				<section className="bg-white  rounded-lg shadow-md p-6 mb-8">
+					<h2 className="text-2xl font-semibold text-gray-900  mb-4">
 						Ⅱ　高等学校における理科科目の開設状況（学年別）
 					</h2>
-					<p className="text-gray-700 dark:text-gray-300 mb-6">
+					<p className="text-gray-700  mb-6">
 						令和5年度（2023年度）公立高等学校における教育課程の編成・実施状況調査の結果に基づく，普通科等における理科基礎科目および理科専門科目の学年別開設状況。
 					</p>
 					
@@ -649,30 +649,30 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 
 					<div className="overflow-x-auto">
 						<table className="w-full text-sm border-collapse">
-							<caption className="text-left text-gray-600 dark:text-gray-400 mb-2 text-xs">
+							<caption className="text-left text-gray-600  mb-2 text-xs">
 								表：理科科目開設状況の学年別比較（2023年度入学者対象データ）
 							</caption>
-							<thead className="bg-gray-100 dark:bg-gray-700">
+							<thead className="bg-gray-100 ">
 								<tr>
-									<th className="border border-gray-300 dark:border-gray-600 p-2 text-left">科目</th>
-									<th className="border border-gray-300 dark:border-gray-600 p-2">1年次 開設率 (%)</th>
-									<th className="border border-gray-300 dark:border-gray-600 p-2">2年次 開設率 (%)</th>
-									<th className="border border-gray-300 dark:border-gray-600 p-2">3年次 開設率 (%)</th>
+									<th className="border border-gray-300  p-2 text-left">科目</th>
+									<th className="border border-gray-300  p-2">1年次 開設率 (%)</th>
+									<th className="border border-gray-300  p-2">2年次 開設率 (%)</th>
+									<th className="border border-gray-300  p-2">3年次 開設率 (%)</th>
 								</tr>
 							</thead>
 							<tbody>
 								{gradeOfferingData.map((item, index) => (
-									<tr key={item.subject} className="text-center hover:bg-gray-50 dark:hover:bg-gray-700/50">
-										<td className={`border border-gray-300 dark:border-gray-600 p-2 text-left font-semibold ${item.subject.includes('基礎') || item.subject.includes('人間生活') ? 'bg-blue-50/50 dark:bg-blue-900/20' : ''}`}>
+									<tr key={item.subject} className="text-center hover:bg-gray-50 :bg-gray-700/50">
+										<td className={`border border-gray-300  p-2 text-left font-semibold ${item.subject.includes('基礎') || item.subject.includes('人間生活') ? 'bg-blue-50/50 ' : ''}`}>
 											{item.subject}
 										</td>
-										<td className="border border-gray-300 dark:border-gray-600 p-2">
+										<td className="border border-gray-300  p-2">
 											{item.grade1}%
 										</td>
-										<td className="border border-gray-300 dark:border-gray-600 p-2">
+										<td className="border border-gray-300  p-2">
 											{item.grade2}%
 										</td>
-										<td className="border border-gray-300 dark:border-gray-600 p-2">
+										<td className="border border-gray-300  p-2">
 											{item.grade3}%
 										</td>
 									</tr>
@@ -681,9 +681,9 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 						</table>
 					</div>
 
-					<div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded">
-					<h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">データからわかること</h3>
-					<ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+					<div className="mt-6 p-4 bg-blue-50  rounded">
+					<h3 className="font-semibold text-gray-900  mb-2">データからわかること</h3>
+					<ul className="list-disc list-inside text-gray-700  space-y-1">
 						<li>
 						1年次の基礎科目は生物基礎が50％を超える一方，地学基礎は10％を切って顕著に少ない
 						</li>
@@ -708,12 +708,12 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 				</section>
 
         {/* セクション3: 大学入学共通テストにおける受験者数の推移 */}
-        <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <section className="bg-white  rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-2xl font-semibold text-gray-900  mb-4">
             Ⅲ　大学入学共通テスト理科専門科目の受験者数推移
           </h2>
-          <p className="text-gray-700 dark:text-gray-300 py-4">
-            令和3年度から令和7年度までの5年間における理科専門科目（物理・化学・生物・地学）の受験者数を分析した。データは大学入試センターが公表した各年度の実施結果概要に基づく。
+          <p className="text-gray-700  py-4">
+            令和3年度から令和7年度までの各年度の大学入学共通テスト実施結果に基づく，理科専門科目（物理・化学・生物・地学）の受験者数。
           </p>
           
           <div className="h-96 mb-6">
@@ -734,42 +734,42 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 
           <div className="overflow-x-auto">
             <table className="w-full text-sm border-collapse">
-              <thead className="bg-gray-100 dark:bg-gray-700">
+              <thead className="bg-gray-100 ">
                 <tr>
-                  <th className="border border-gray-300 dark:border-gray-600 p-2" >年度</th>
-                  <th className="border border-gray-300 dark:border-gray-600 p-2" colSpan={2}>物理</th>
-                  <th className="border border-gray-300 dark:border-gray-600 p-2" colSpan={2}>化学</th>
-                  <th className="border border-gray-300 dark:border-gray-600 p-2" colSpan={2}>生物</th>
-                  <th className="border border-gray-300 dark:border-gray-600 p-2" colSpan={2}>地学</th>
-                  <th className="border border-gray-300 dark:border-gray-600 p-2">理科全体</th>
+                  <th className="border border-gray-300  p-2" >年度</th>
+                  <th className="border border-gray-300  p-2" colSpan={2}>物理</th>
+                  <th className="border border-gray-300  p-2" colSpan={2}>化学</th>
+                  <th className="border border-gray-300  p-2" colSpan={2}>生物</th>
+                  <th className="border border-gray-300  p-2" colSpan={2}>地学</th>
+                  <th className="border border-gray-300  p-2">理科全体</th>
                 </tr>
               </thead>
               <tbody>
                 {commonTestData.map((row, idx) => (
                   <tr key={idx} className="text-center">
-                    <td className="border border-gray-300 dark:border-gray-600 p-2">{row.year}</td>
+                    <td className="border border-gray-300  p-2">{row.year}</td>
 										
-                    <td className="border border-gray-300 dark:border-gray-600 p-2">{row.physics.toLocaleString()}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 p-2">{((row.physics / (row.physics + row.chemistry + row.biology + row.geoscience)) * 100).toFixed(2)}%</td>
+                    <td className="border border-gray-300  p-2">{row.physics.toLocaleString()}</td>
+                    <td className="border border-gray-300  p-2">{((row.physics / (row.physics + row.chemistry + row.biology + row.geoscience)) * 100).toFixed(2)}%</td>
 										
-                    <td className="border border-gray-300 dark:border-gray-600 p-2">{row.chemistry.toLocaleString()}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 p-2">{((row.chemistry / (row.physics + row.chemistry + row.biology + row.geoscience)) * 100).toFixed(2)}%</td>
+                    <td className="border border-gray-300  p-2">{row.chemistry.toLocaleString()}</td>
+                    <td className="border border-gray-300  p-2">{((row.chemistry / (row.physics + row.chemistry + row.biology + row.geoscience)) * 100).toFixed(2)}%</td>
 										
-                    <td className="border border-gray-300 dark:border-gray-600 p-2">{row.biology.toLocaleString()}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 p-2">{((row.biology / (row.physics + row.chemistry + row.biology + row.geoscience)) * 100).toFixed(2)}%</td>
+                    <td className="border border-gray-300  p-2">{row.biology.toLocaleString()}</td>
+                    <td className="border border-gray-300  p-2">{((row.biology / (row.physics + row.chemistry + row.biology + row.geoscience)) * 100).toFixed(2)}%</td>
 										
-                    <td className="border border-gray-300 dark:border-gray-600 p-2 bg-slate-100 font-semibold">{row.geoscience.toLocaleString()}</td>
-                    <td className="border border-gray-300 dark:border-gray-600 p-2 bg-slate-100 font-semibold">{((row.geoscience / (row.physics + row.chemistry + row.biology + row.geoscience)) * 100).toFixed(2)}%</td>
-                    <td className="border border-gray-300 dark:border-gray-600 p-2">{(row.physics + row.chemistry + row.biology + row.geoscience).toLocaleString()}</td>
+                    <td className="border border-gray-300  p-2 bg-slate-100 font-semibold">{row.geoscience.toLocaleString()}</td>
+                    <td className="border border-gray-300  p-2 bg-slate-100 font-semibold">{((row.geoscience / (row.physics + row.chemistry + row.biology + row.geoscience)) * 100).toFixed(2)}%</td>
+                    <td className="border border-gray-300  p-2">{(row.physics + row.chemistry + row.biology + row.geoscience).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded">
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">データからわかること</h3>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+          <div className="mt-6 p-4 bg-blue-50  rounded">
+            <h3 className="font-semibold text-gray-900  mb-2">データからわかること</h3>
+            <ul className="list-disc list-inside text-gray-700  space-y-1">
               <li>化学の受験者数は一貫して最大であり，約18万人で推移している</li>
 							<li>物理の受験者数は令和4年度から0.5ポイント未満の微小な減少を続けているものの，化学の受験者数の8割ほどを維持し続けている</li>
 							<li>生物の受験者数はこの4つの科目の中では非常に安定して推移している</li>
@@ -781,48 +781,48 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
         </section>
 				
         {/* セクション4: 大学入試における採用状況 */}
-        <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <section className="bg-white  rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-2xl font-semibold text-gray-900  mb-4">
             Ⅳ　国立大学（学部）における地学の受験可否
           </h2>
 					
-          <p className="text-gray-700 dark:text-gray-300 py-4">
-						左は共通テストで理科を使用する国立大学{nationalUniversityWithLinks.length}校のうち地学を利用できる大学の数。
+          <p className="text-gray-700  py-4">
+						各大学の入学者募集要項に基づく，地学の試験を利用・実施している国立大学とその数。左は共通テストで理科を使用する国立大学{nationalUniversityWithLinks.length}校のうち地学を利用できる大学の数。
 						右は二次試験で理科を使用する国立大学{nationalUniversityScience.length}校のうち地学を利用できる大学の数。総合問題や面接の内容を含めていない場合がある。リンク先は原則として学部入試の募集要項または入試情報全体を掲載しているページ。
           </p>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="p-6 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">共通テストで地学を利用できる大学</div>
-              <div className="text-5xl font-bold text-green-600 dark:text-green-400 mb-2">{nationalUniversityCommonGeo.length}<span className="text-2xl mx-1">校</span></div>
-              <div className="text-2xl text-gray-700 dark:text-gray-300">/ {nationalUniversityWithLinks.length + publicUniversityWithLinks.length}校</div>
-              <div className="text-sm text-gray-500 dark:text-gray-500 mt-4">採用率: <span className="text-lg font-semibold">{((nationalUniversityCommonGeo.length / (nationalUniversityWithLinks.length + publicUniversityWithLinks.length))*100).toFixed(2)}</span> ％</div>
-							<h4 className="mt-4 text-sm font-semibold text-green-700 dark:text-green-300 border-t border-green-300 dark:border-green-700 pt-3">【共通テストで地学を利用できる大学】</h4>
+            <div className="p-6 bg-green-50  rounded-lg">
+              <div className="text-sm text-gray-600  mb-2">共通テストで地学を利用できる大学</div>
+              <div className="text-5xl font-bold text-green-600  mb-2">{nationalUniversityCommonGeo.length}<span className="text-2xl mx-1">校</span></div>
+              <div className="text-2xl text-gray-700 ">/ {nationalUniversityWithLinks.length + publicUniversityWithLinks.length}校</div>
+              <div className="text-sm text-gray-500  mt-4">採用率: <span className="text-lg font-semibold">{((nationalUniversityCommonGeo.length / (nationalUniversityWithLinks.length + publicUniversityWithLinks.length))*100).toFixed(2)}</span> ％</div>
+							<h4 className="mt-4 text-sm font-semibold text-green-700  border-t border-green-300  pt-3">【共通テストで地学を利用できる大学】</h4>
 							<div className="text-xs">
 							{nlinkElementsCommonGeo}
 							</div>
             </div>
 
-            <div className="p-6 bg-red-50 dark:bg-red-900/20 rounded-lg">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">二次試験で地学を利用できる大学</div>
-              <div className="text-5xl font-bold text-red-600 dark:text-red-400 mb-2">{nationalUniversityGeo.length}<span className="text-2xl mx-1">校</span></div>
-              <div className="text-2xl text-gray-700 dark:text-gray-300">/ {nationalUniversityScience.length + publicUniversityWithLinks.length}校</div>
-              <div className="text-sm text-gray-500 dark:text-gray-500 mt-4">採用率: <span className="text-lg font-semibold">{((nationalUniversityGeo.length / (nationalUniversityScience.length + publicUniversityWithLinks.length))*100).toFixed(2)}</span> ％</div>
-							<h4 className="mt-4 text-sm font-semibold text-red-700 dark:text-red-300 border-t border-red-300 dark:border-red-700 pt-3">【二次試験で地学を利用できる大学】</h4>
+            <div className="p-6 bg-red-50  rounded-lg">
+              <div className="text-sm text-gray-600  mb-2">二次試験で地学を利用できる大学</div>
+              <div className="text-5xl font-bold text-red-600  mb-2">{nationalUniversityGeo.length}<span className="text-2xl mx-1">校</span></div>
+              <div className="text-2xl text-gray-700 ">/ {nationalUniversityScience.length + publicUniversityWithLinks.length}校</div>
+              <div className="text-sm text-gray-500  mt-4">採用率: <span className="text-lg font-semibold">{((nationalUniversityGeo.length / (nationalUniversityScience.length + publicUniversityWithLinks.length))*100).toFixed(2)}</span> ％</div>
+							<h4 className="mt-4 text-sm font-semibold text-red-700  border-t border-red-300  pt-3">【二次試験で地学を利用できる大学】</h4>
 							<div className="text-xs">
 							{nlinkElementsGeo}
 							</div>
             </div>
           </div>
 					<div className="py-4 px-2">
-						<p className="text-left text-gray-600 dark:text-gray-400 text-xs">
+						<p className="text-left text-gray-600  text-xs">
 							古い情報・誤情報が含まれる場合がありますので<strong className="text-red-600 font-sans">受験などの際は必ず各大学の募集要項などを確認し</strong>，このデータは参考程度にとどめてください。
 						</p>
           </div>
 
-          <div className="mt-2 p-4 bg-blue-50 dark:bg-blue-900/20 rounded">
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">データからわかること</h3>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1">
+          <div className="mt-2 p-4 bg-blue-50  rounded">
+            <h3 className="font-semibold text-gray-900  mb-2">データからわかること</h3>
+            <ul className="list-disc list-inside text-gray-700  space-y-1">
 							<li>共通テストの理科を科すものの地学を全く利用できない大学は{((1-(nationalUniversityCommonGeo.length / (nationalUniversityWithLinks.length )))*100).toFixed(1)}%に留まる</li>
               <li>二次試験で理科を科すものの地学を全く選択できない大学は{((1-(nationalUniversityGeo.length / (nationalUniversityScience.length )))*100).toFixed(1)}%にのぼる</li>
 							<li>
@@ -834,86 +834,86 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
         </section>
 
         {/* セクション5: 論理的考察 */}
-        <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <section className="bg-white  rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-2xl font-semibold text-gray-900  mb-4">
             Ⅴ　因果関係など
           </h2>
           
           <div className="space-y-6">
             <div>
-              <p className="text-gray-700 dark:text-gray-300 py-2">
-                　地学が受験教科として選ばれない理由には次のようなものがある。
+              <p className="text-gray-700  py-2">
+                　地学が受験教科として選ばれないその他の理由など。
               </p>
-              <div className="bg-gray-100 dark:bg-gray-700 p-8 mx-6 my-4 rounded space-y-2">
+              <div className="bg-gray-100  p-8 mx-6 my-4 rounded space-y-2">
                 <div className="flex items-center space-x-4">
                   <div className="w-8 h-8 text-red-600 text-4xl flex items-center justify-center font-bold">❶</div>
-                  <div className="text-gray-900 dark:text-gray-100">物理・化学・生物・数学の横断的な知識が必要</div>
+                  <div className="text-gray-900 ">物理・化学・生物・数学の横断的な知識が必要</div>
                 </div>
                 <div className="flex items-center space-x-4 pt-2">
                   <div className="w-8 h-8 text-black/20 text-4xl flex items-center justify-center font-bold"><ImArrowDown /></div>
-                  <div className="text-gray-900 dark:text-gray-100"></div>
+                  <div className="text-gray-900 "></div>
                 </div>
 								
                 <div className="flex items-center space-x-4">
                   <div className="w-8 h-8 text-orange-600 text-4xl flex items-center justify-center font-bold">❷</div>
-                  <div className="text-gray-900 dark:text-gray-100">大学教養課程の物理・化学分野の必要性・専門性・難易度が高い</div>
+                  <div className="text-gray-900 ">大学教養課程の物理・化学分野の必要性・専門性・難易度が高い</div>
                 </div>
                 <div className="flex items-center space-x-4 pt-2">
                   <div className="w-8 h-8 text-black/20 text-4xl flex items-center justify-center font-bold"><ImArrowDown /></div>
-                  <div className="text-gray-900 dark:text-gray-100"></div>
+                  <div className="text-gray-900 "></div>
                 </div>
 								
                 <div className="flex items-center space-x-4">
                   <div className="w-8 h-8 text-green-600 text-4xl flex items-center justify-center font-bold">❸</div>
-                  <div className="text-gray-900 dark:text-gray-100">大学二次試験で地学を採用しない</div>
+                  <div className="text-gray-900 ">大学二次試験で地学を採用しない</div>
                 </div>
                 <div className="flex items-center space-x-4 pt-2">
                   <div className="w-8 h-8 text-black/20 text-4xl flex items-center justify-center font-bold"><ImArrowDown /></div>
-                  <div className="text-gray-900 dark:text-gray-100"></div>
+                  <div className="text-gray-900 "></div>
                 </div>
 								
                 <div className="flex items-center space-x-4">
                   <div className="w-8 h-8 text-emerald-600 text-4xl flex items-center justify-center font-bold">❹</div>
-                  <div className="text-gray-900 dark:text-gray-100">受験に不要な科目として認識される</div>
+                  <div className="text-gray-900 ">受験に不要な科目として認識される</div>
                 </div>
                 <div className="flex items-center space-x-4 pt-2">
                   <div className="w-8 h-8 text-black/20 text-4xl flex items-center justify-center font-bold"><ImArrowDown /></div>
-                  <div className="text-gray-900 dark:text-gray-100"></div>
+                  <div className="text-gray-900 "></div>
                 </div>
 								
                 <div className="flex items-center space-x-4">
                   <div className="w-8 h-8 text-cyan-800 text-4xl flex items-center justify-center font-bold">❺</div>
-                  <div className="text-gray-900 dark:text-gray-100">高校における開設率の低下</div>
+                  <div className="text-gray-900 ">高校における開設率の低下</div>
                 </div>
                 <div className="flex items-center space-x-4 pt-2">
                   <div className="w-8 h-8 text-black/20 text-4xl flex items-center justify-center font-bold"><ImArrowDown /></div>
-                  <div className="text-gray-900 dark:text-gray-100"></div>
+                  <div className="text-gray-900 "></div>
                 </div>
 								
                 <div className="flex items-center space-x-4">
                   <div className="w-8 h-8 text-blue-800 text-4xl flex items-center justify-center font-bold">❻</div>
-                  <div className="text-gray-900 dark:text-gray-100">地学専門教員の採用抑制</div>
+                  <div className="text-gray-900 ">地学専門教員の採用抑制</div>
                 </div>
                 <div className="flex items-center space-x-4 pt-2">
                   <div className="w-8 h-8 text-black/20 text-4xl flex items-center justify-center font-bold"><ImArrowDown /></div>
-                  <div className="text-gray-900 dark:text-gray-100"></div>
+                  <div className="text-gray-900 "></div>
                 </div>
 								
                 <div className="flex items-center space-x-4">
                   <div className="w-8 h-8 text-violet-800 text-4xl flex items-center justify-center font-bold">❼</div>
-                  <div className="text-gray-900 dark:text-gray-100">教科書の需要・機会が低下</div>
+                  <div className="text-gray-900 ">教科書の需要・機会が低下</div>
                 </div>
               </div>
             </div>
-						<div className="mt-2 p-4 bg-blue-50 dark:bg-blue-900/20 rounded">
-							<ul className="list-none list-inside text-gray-700 dark:text-gray-300 space-y-1">
+						<div className="mt-2 p-4 bg-blue-50  rounded">
+							<ul className="list-none list-inside text-gray-700  space-y-1">
 								<li>❶　地学は，地球の構造や気象，宇宙，地震などを扱う学問で，これらの現象を理解するには物理の力学や波動，化学の反応や物質の性質，生物の進化や環境，数学の微積分などが必要になり，高校生が各分野の基礎を十分に学ばないうちに地学を選択しようとすると，広範な知識の要求に難しさを感じる</li>
 								<li>❷　大学では，物理や化学は専門科目として重視され，授業も高度で難易度が高い上，物理では数式を使って自然現象をモデル化したり，化学では分子構造や反応機構を学ぶなど，理系学生にとって必要不可欠であり優先度が高い</li>
 								
 								<li>➌　理系の二次試験，特に医学部や工学部では，物理・化学・生物（若干数の大学では生物も選択できない）は選択できるが地学は選択できないところが多い</li>
 								<li>❹　文系においては環境や防災意識の高まりからか共通テストを利用できる大学は増えたが，収益性が低い，学部・学科がない，目的が環境や防災のみに終始しているなどから理系の受験機会は制限されている</li>
 								<li>❺　高校カリキュラムは，形式的には多様な科目が用意されるが，実質的には大学入試の合否に直結する科目が重視される</li>
-								<li>❻　国公立高校における地学教員の採用枠が少なく，採用を行っていない年次があるほか，採用年次であっても応募者が少ないこと，学習指導要領の「解説」が非常に詳細になり，教員の裁量や主体性を制限していることなどの指摘がある</li>
+								<li>❻　国公立高校における地学教員の採用枠が少なく，採用を行っていない年次があるほか，採用年次であっても応募者が少ないことなどの指摘がある</li>
 								<li>❼　出版社にとって需要の少ない教科書は採算が取れにくくなり，質の高い教材を開発・出版するインセンティブが低下し，市場に出回る地学の教材の種類や機会は減少の一途をたどる（現在理系地学の教科書はわずか1社のみが発行している）</li>
 							</ul>
 						</div>
@@ -921,18 +921,18 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
         </section>
 
         {/* セクション6: 結論 */}
-        <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <section className="bg-white  rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-2xl font-semibold text-gray-900  mb-4">
             Ⅵ　まとめ
           </h2>
           
-          <div className="space-y-4 text-gray-700 dark:text-gray-300">
-            <p className="text-gray-700 dark:text-gray-300 py-2">
+          <div className="space-y-4 text-gray-700 ">
+            <p className="text-gray-700  py-2">
               諸データを見ると，大学入試において地学は周縁化の傾向が強い。
             </p>
             
-            <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded">
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">まとめ</h3>
+            <div className="bg-gray-100  p-4 rounded">
+              <h3 className="font-semibold text-gray-900  mb-2">まとめ</h3>
               <ul className="list-decimal list-inside space-y-2">
                 <li>高校地学教員の採用の機会少ないうえ，応募人数が他の1/10ほどと少ない</li>
                 <li>専門科目としての地学の開講率が10％を超えず，著しく低い</li>
@@ -951,40 +951,63 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
         </section>
 
         {/* 出典 */}
-        <section className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">
-            データ出典
+        <section className="bg-white  rounded-lg shadow-md p-6">
+          <h2 className="text-2xl font-semibold text-gray-900  mb-4">
+            データ出典・参考文献
           </h2>
-          <div className="text-sm text-gray-600 dark:text-gray-400 space-y-2">
+          <div className="text-sm text-gray-600  space-y-2">
+					
+						<div>
+							<h3 className="font-semibold text-gray-900 mb-2">教員採用試験対策サイト</h3>
+							<ul className="list-disc list-inside space-y-1 ml-4">
+								<li><cite className="hover:text-gray-500 not-italic"><a href="https://book.jiji.com/basic/app_guide/" target="_blank" rel="noopener noreferrer">教員採用試験データ｜教員採用試験対策サイト（時事通信出版局）</a></cite></li>
+							</ul>
+						</div>
+
+						<div>
+							<h3 className="font-semibold text-gray-900 mb-2">文部科学省</h3>
+							<ul className="list-disc list-inside space-y-1 ml-4">
+								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.mext.go.jp/a_menu/shotou/new-cs/1368209_00001.htm" target="_blank" rel="noopener noreferrer">令和5年度公立高等学校における教育課程の編成・実施状況調査の結果について（文部科学省）</a></cite></li>
+							</ul>
+						</div>
+
             <div>
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">大学入試センター</h3>
+              <h3 className="font-semibold text-gray-900  mb-2">大学入試センター</h3>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>令和3年度大学入学共通テスト実施結果の概要</li>
-                <li>令和4年度大学入学共通テスト実施結果の概要</li>
-                <li>令和5年度大学入学共通テスト実施結果の概要</li>
-                <li>令和6年度大学入学共通テスト実施結果の概要</li>
-                <li>令和7年度大学入学共通テスト実施結果の概要</li>
+								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.dnc.ac.jp/albums/abm.php?d=733&f=abm00005261.pdf&n=%E4%BB%A4%E5%92%8C%EF%BC%97%E5%B9%B4%E5%BA%A6%E5%A4%A7%E5%AD%A6%E5%85%A5%E5%AD%A6%E5%85%B1%E9%80%9A%E3%83%86%E3%82%B9%E3%83%88_%E5%AE%9F%E6%96%BD%E7%B5%90%E6%9E%9C%E3%81%AE%E6%A6%82%E8%A6%81.pdf" target="_blank" rel="noopener noreferrer">令和3年度大学入学共通テスト実施結果の概要（大学入試センター）</a></cite></li>
+								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.dnc.ac.jp/albums/abm.php?d=58&f=abm00000702.pdf&n=%E4%BB%A4%E5%92%8C%EF%BC%94%E5%B9%B4%E5%BA%A6%E5%A4%A7%E5%AD%A6%E5%85%A5%E5%AD%A6%E5%85%B1%E9%80%9A%E3%83%86%E3%82%B9%E3%83%88%E5%AE%9F%E6%96%BD%E7%B5%90%E6%9E%9C%E3%81%AE%E6%A6%82%E8%A6%81.pdf" target="_blank" rel="noopener noreferrer">令和4年度大学入学共通テスト実施結果の概要（大学入試センター）</a></cite></li>
+								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.dnc.ac.jp/albums/abm.php?d=494&f=abm00003434.pdf&n=%E5%AE%9F%E6%96%BD%E7%B5%90%E6%9E%9C%E3%81%AE%E6%A6%82%E8%A6%81R5.pdf" target="_blank" rel="noopener noreferrer">令和5年度大学入学共通テスト実施結果の概要（大学入試センター）</a></cite></li>
+								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.dnc.ac.jp/albums/abm.php?d=654&f=abm00004367.pdf&n=%E4%BB%A4%E5%92%8C%EF%BC%96%E5%B9%B4%E5%BA%A6%E8%A9%A6%E9%A8%93_%E4%BB%A4%E5%92%8C%EF%BC%96%E5%B9%B4%E5%BA%A6%E5%A4%A7%E5%AD%A6%E5%85%A5%E5%AD%A6%E5%85%B1%E9%80%9A%E3%83%86%E3%82%B9%E3%83%88_%E5%AE%9F%E6%96%BD%E7%B5%90%E6%9E%9C%E3%81%AE%E6%A6%82%E8%A6%81.pdf" target="_blank" rel="noopener noreferrer">令和6年度大学入学共通テスト実施結果の概要（大学入試センター）</a></cite></li>
+								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.dnc.ac.jp/albums/abm.php?d=733&f=abm00005261.pdf&n=%E4%BB%A4%E5%92%8C%EF%BC%97%E5%B9%B4%E5%BA%A6%E5%A4%A7%E5%AD%A6%E5%85%A5%E5%AD%A6%E5%85%B1%E9%80%9A%E3%83%86%E3%82%B9%E3%83%88_%E5%AE%9F%E6%96%BD%E7%B5%90%E6%9E%9C%E3%81%AE%E6%A6%82%E8%A6%81.pdf" target="_blank" rel="noopener noreferrer">令和7年度大学入学共通テスト実施結果の概要（大学入試センター）</a></cite></li>
               </ul>
             </div>
+						
             <div>
-              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">学術論文・調査報告</h3>
+              <h3 className="font-semibold text-gray-900  mb-2">学術論文・調査報告・その他資料</h3>
               <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>須藤靖「高校理科における地学教育の現状と課題」(2017年，東京大学大学院理学系研究科)</li>
-                <li>平成27年度（2015年度）公立高等学校調査</li>
-                <li>2014年度高等学校理科履修状況調査</li>
+								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.mext.go.jp/a_menu/shotou/new-cs/1407074.htm" target="_blank" rel="noopener noreferrer">高等学校学習指導要領解説 理科編（文部科学省）</a></cite></li>
+								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.jstage.jst.go.jp/article/jgeography1889/105/6/105_6_718/_article/-char/ja/" target="_blank" rel="noopener noreferrer">高校の地学教育の現状と課題｜深田地質研究所（吉岡直人）</a></cite></li>
+								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.metsoc.jp/tenki/pdf/2014/2014_03_0029.pdf" target="_blank" rel="noopener noreferrer">日本の気象学の現状と展望｜日本気象学会（日本気象学会36－37期学術委員会および同委員会が依頼した執筆者グループ）</a></cite></li>
+								<li>
+								<cite className="hover:text-gray-500 not-italic"><a href="https://www.tandfonline.com/doi/abs/10.5408/1089-9995-56.2.113" target="_blank" rel="noopener noreferrer">An Analysis of the Bachelor of Science in Geology Degree as Offered in the United States｜Journal of Geoscience Education Volume 56 p. 113-119（Carl N. Drummond & Jane M. Markin）</a></cite>
+								</li>
+								<li>
+								<cite className="hover:text-gray-500 not-italic"><a href="https://www.mext.go.jp/a_menu/shotou/kyoukasho/kentei/kekka.htm" target="_blank" rel="noopener noreferrer">（2022年3月）令和3年度教科用図書検定結果の概要（文部科学省）</a></cite>
+								</li>
+								
               </ul>
             </div>
-            <div className="mt-4 pt-4 border-t border-gray-300 dark:border-gray-600">
+            <div className="mt-4 pt-4 border-t border-gray-300 ">
               <p className="text-xs">
-                本報告書は上記資料から抽出したデータに基づき作成された。数値は原典に記載されたものを使用し，独自の推計・補正は行っていない。
+                データは2025年11月現在
               </p>
             </div>
           </div>
         </section>
 
         {/* フッター */}
-        <footer className="mt-12 text-center text-sm text-gray-500 dark:text-gray-400">
-          <p>本分析は2025年11月時点での公開データに基づく</p>
+        <footer className="mt-12 text-center text-sm text-gray-500 ">
+          <p>AlgxNef</p>
         </footer>
       </div>
     </div>
