@@ -127,9 +127,11 @@ export default async function PostPage({ params }: Props) {
 					<TransformedContent htmlContent={mainContent} />
           {/* 演習問題セクション (クライアントコンポーネントを呼び出す) */}
           {questionHtml && answerHtml !== null && (
-            <section className="mt-8 bg-slate-50 p-6 rounded-lg shadow-inner">
-              <h2 className="text-2xl font-bold text-blue-800 mb-6 border-b-2 border-blue-200 pb-2">
+            <section className="my-8">
+              <h2 className="text-lg font-bold text-gray-800">
+								<div className="w-fit px-3 bg-gray-300">
                 演習問題
+								</div>
               </h2>
               <ExerciseAccordion
                 questionHtml={questionHtml}
