@@ -102,7 +102,7 @@ export const transformContent = (content: string): string => {
 			// liタグを抽出するための正規表現
 			const liRegex = /<li[^>]*>(.*?)<\/li>/gs;
 
-			const transformedLis = ulInnerContent.replace(liRegex, (liMatch, liInnerContent) => {
+			const transformedLis = ulInnerContent.replace(liRegex, (liMatch: string, liInnerContent: string) => {
 					let content = liInnerContent.trim();
 
 					// 5, 6: {1}のような波カッコの中の半角数字をconvertRLetterで置き換え
