@@ -533,9 +533,9 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
     <div className="min-h-screen bg-gray-50 ">
       <div className="max-w-6xl mx-auto px-4 py-4">
         <header className="py-8">
-          <h1 className="text-4xl font-bold text-slate-900 text-center mb-4 ">
+          <h2 className="text-4xl font-bold text-slate-900 text-center mb-4 ">
             理系地学入門とは
-          </h1>
+          </h2>
           <p className="text-lg text-gray-600 ">
 						　「地学」は「地球科学」の略称であり，地球を構成する物質（鉱物，岩石）から，大気，海洋，地球内部構造，さらには地球環境に影響を与える宇宙（天文学）まで，地球科学全般にわたる分野を対象とする学問である。「理系地学」とは，主として国公立大学の理系学部を受験する際に選択可能な，高校理科の専門科目「地学」を指す。現在，物理や化学，生物と違って大学入学における受験者数が少ないため，「地学」という語は主に文系志望者が選択する「地学基礎」の文脈で使用されるケースが多い。したがって専門科目としての地学を呼称する場合，地学基礎と区別する目的で「理系地学」と呼ばれる。本サイトの設立趣旨に代えて，次のようなデータを示す。
 					</p>
@@ -544,9 +544,9 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 
         {/* セクション1: 高校教員採用率 */}
 				<section className="bg-white  rounded-lg shadow-md p-6 mb-8">
-						<h2 className="text-2xl font-semibold text-gray-900  mb-4">
+						<h3 className="text-2xl font-semibold text-gray-900  mb-4">
 								Ⅰ　高校教員採用試験における理科（地学）の募集状況
-						</h2>
+						</h3>
 						
 						<p className="text-gray-700  py-4"> 情報誌教員養成セミナー記載の各年度の全国教員採用試験実施内容一覧に基づく，高校理科の教員を募集しているものの，募集教科に「地学」のない（「理科（物理・化学・生物）」など）都道府県市（2024年度は{total2024}，2025年度は{total2025}の自治体が対象）の数。「理科」単独，または「物理・化学・生物・地学」などの表記をしている自治体を除外することで計上。
 						</p>
@@ -560,7 +560,7 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 										<div className="text-2xl text-gray-700 ">/ {total2024}自治体</div>
 										<div className="text-sm text-gray-500  mt-4">不実施率: <span className="text-lg font-semibold">{excludedRate2024}</span> ％</div>
 										
-										<h4 className="mt-4 text-sm font-semibold text-red-700  border-t border-red-300  pt-3">【地学教員を募集しない自治体】</h4>
+										<h5 className="mt-4 text-sm font-semibold text-red-700  border-t border-red-300  pt-3">【地学教員を募集しない自治体】</h5>
 										<div className="text-xs">
 												{excludedList2024.map((name, index) => (
 														<React.Fragment key={name}>
@@ -579,7 +579,7 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 										<div className="text-2xl text-gray-700 ">/ {total2025}自治体</div>
 										<div className="text-sm text-gray-500  mt-4">不実施率: <span className="text-lg font-semibold">{excludedRate2025}</span> ％</div>
 										
-										<h4 className="mt-4 text-sm font-semibold text-blue-700  border-t border-blue-300  pt-3">【地学教員を募集しない自治体】</h4>
+										<h5 className="mt-4 text-sm font-semibold text-blue-700  border-t border-blue-300  pt-3">【地学教員を募集しない自治体】</h5>
 										<div className="text-xs">
 												{excludedList2025.map((name, index) => (
 														<React.Fragment key={name}>
@@ -598,7 +598,7 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 						</div>
 
 						<div className="p-4 bg-blue-50  rounded">
-						<h3 className="font-semibold text-gray-900  mb-2">データからわかること</h3>
+						<h4 className="font-semibold text-gray-900  mb-2">データからわかること</h4>
 								<ul className="list-disc list-inside text-gray-700  space-y-1">
 										<li>「理科」のみ記載がある場合も多く，残りの自治体で必ずしも地学教員として従事できるとは限らない</li>
 										<li>5の自治体（神奈川県/静岡県/京都市/長崎県/宮崎県）は2024年度には地学教員（理科としての採用を含む）採用枠があったが，2025年度にはなくなり，一方で4の自治体（青森県/滋賀県/香川県/熊本県）では2024年度の採用枠はなかったが2025年度に採用枠が設けられた
@@ -610,9 +610,9 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 
         {/* セクション2: 高校における履修率 */}
 				<section className="bg-white  rounded-lg shadow-md p-6 mb-8">
-					<h2 className="text-2xl font-semibold text-gray-900  mb-4">
+					<h3 className="text-2xl font-semibold text-gray-900  mb-4">
 						Ⅱ　高等学校における理科科目の開設状況（学年別）
-					</h2>
+					</h3>
 					<p className="text-gray-700  mb-6">
 						令和5年度（2023年度）公立高等学校における教育課程の編成・実施状況調査の結果に基づく，普通科等における理科基礎科目および理科専門科目の学年別開設状況。
 					</p>
@@ -682,7 +682,7 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 					</div>
 
 					<div className="mt-6 p-4 bg-blue-50  rounded">
-					<h3 className="font-semibold text-gray-900  mb-2">データからわかること</h3>
+					<h4 className="font-semibold text-gray-900  mb-2">データからわかること</h4>
 					<ul className="list-disc list-inside text-gray-700  space-y-1">
 						<li>
 						1年次の基礎科目は生物基礎が50％を超える一方，地学基礎は10％を切って顕著に少ない
@@ -709,9 +709,9 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 
         {/* セクション3: 大学入学共通テストにおける受験者数の推移 */}
         <section className="bg-white  rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900  mb-4">
+          <h3 className="text-2xl font-semibold text-gray-900  mb-4">
             Ⅲ　大学入学共通テスト理科専門科目の受験者数推移
-          </h2>
+          </h3>
           <p className="text-gray-700  py-4">
             令和3年度から令和7年度までの各年度の大学入学共通テスト実施結果に基づく，理科専門科目（物理・化学・生物・地学）の受験者数。
           </p>
@@ -768,7 +768,7 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
           </div>
 
           <div className="mt-6 p-4 bg-blue-50  rounded">
-            <h3 className="font-semibold text-gray-900  mb-2">データからわかること</h3>
+            <h4 className="font-semibold text-gray-900  mb-2">データからわかること</h4>
             <ul className="list-disc list-inside text-gray-700  space-y-1">
               <li>化学の受験者数は一貫して最大であり，約18万人で推移している</li>
 							<li>物理の受験者数は令和4年度から0.5ポイント未満の微小な減少を続けているものの，化学の受験者数の8割ほどを維持し続けている</li>
@@ -782,9 +782,9 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 				
         {/* セクション4: 大学入試における採用状況 */}
         <section className="bg-white  rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900  mb-4">
+          <h3 className="text-2xl font-semibold text-gray-900  mb-4">
             Ⅳ　国立大学（学部）における地学の受験可否
-          </h2>
+          </h3>
 					
           <p className="text-gray-700  py-4">
 						各大学の入学者募集要項に基づく，地学の試験を利用・実施している国立大学とその数。左は共通テストで理科を使用する国立大学{nationalUniversityWithLinks.length}校のうち地学を利用できる大学の数。
@@ -797,7 +797,7 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
               <div className="text-5xl font-bold text-green-600  mb-2">{nationalUniversityCommonGeo.length}<span className="text-2xl mx-1">校</span></div>
               <div className="text-2xl text-gray-700 ">/ {nationalUniversityWithLinks.length + publicUniversityWithLinks.length}校</div>
               <div className="text-sm text-gray-500  mt-4">採用率: <span className="text-lg font-semibold">{((nationalUniversityCommonGeo.length / (nationalUniversityWithLinks.length + publicUniversityWithLinks.length))*100).toFixed(2)}</span> ％</div>
-							<h4 className="mt-4 text-sm font-semibold text-green-700  border-t border-green-300  pt-3">【共通テストで地学を利用できる大学】</h4>
+							<h5 className="mt-4 text-sm font-semibold text-green-700  border-t border-green-300  pt-3">【共通テストで地学を利用できる大学】</h5>
 							<div className="text-xs">
 							{nlinkElementsCommonGeo}
 							</div>
@@ -808,7 +808,7 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
               <div className="text-5xl font-bold text-red-600  mb-2">{nationalUniversityGeo.length}<span className="text-2xl mx-1">校</span></div>
               <div className="text-2xl text-gray-700 ">/ {nationalUniversityScience.length + publicUniversityWithLinks.length}校</div>
               <div className="text-sm text-gray-500  mt-4">採用率: <span className="text-lg font-semibold">{((nationalUniversityGeo.length / (nationalUniversityScience.length + publicUniversityWithLinks.length))*100).toFixed(2)}</span> ％</div>
-							<h4 className="mt-4 text-sm font-semibold text-red-700  border-t border-red-300  pt-3">【二次試験で地学を利用できる大学】</h4>
+							<h5 className="mt-4 text-sm font-semibold text-red-700  border-t border-red-300  pt-3">【二次試験で地学を利用できる大学】</h5>
 							<div className="text-xs">
 							{nlinkElementsGeo}
 							</div>
@@ -821,7 +821,7 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
           </div>
 
           <div className="mt-2 p-4 bg-blue-50  rounded">
-            <h3 className="font-semibold text-gray-900  mb-2">データからわかること</h3>
+            <h4 className="font-semibold text-gray-900  mb-2">データからわかること</h4>
             <ul className="list-disc list-inside text-gray-700  space-y-1">
 							<li>共通テストの理科を科すものの地学を全く利用できない大学は{((1-(nationalUniversityCommonGeo.length / (nationalUniversityWithLinks.length )))*100).toFixed(1)}%に留まる</li>
               <li>二次試験で理科を科すものの地学を全く選択できない大学は{((1-(nationalUniversityGeo.length / (nationalUniversityScience.length )))*100).toFixed(1)}%にのぼる</li>
@@ -835,9 +835,9 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 
         {/* セクション5: 論理的考察 */}
         <section className="bg-white  rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900  mb-4">
+          <h3 className="text-2xl font-semibold text-gray-900  mb-4">
             Ⅴ　因果関係など
-          </h2>
+          </h3>
           
           <div className="space-y-6">
             <div>
@@ -922,9 +922,9 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 
         {/* セクション6: 結論 */}
         <section className="bg-white  rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900  mb-4">
+          <h3 className="text-2xl font-semibold text-gray-900  mb-4">
             Ⅵ　まとめ
-          </h2>
+          </h3>
           
           <div className="space-y-4 text-gray-700 ">
             <p className="text-gray-700  py-2">
@@ -932,7 +932,7 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
             </p>
             
             <div className="bg-gray-100  p-4 rounded">
-              <h3 className="font-semibold text-gray-900  mb-2">まとめ</h3>
+              <h4 className="font-semibold text-gray-900  mb-2">まとめ</h4>
               <ul className="list-decimal list-inside space-y-2">
                 <li>高校地学教員の採用の機会少ないうえ，応募人数が他の1/10ほどと少ない</li>
                 <li>専門科目としての地学の開講率が10％を超えず，著しく低い</li>
@@ -952,27 +952,27 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 
         {/* 出典 */}
         <section className="bg-white  rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-semibold text-gray-900  mb-4">
+          <h3 className="text-2xl font-semibold text-gray-900  mb-4">
             データ出典・参考文献
-          </h2>
+          </h3>
           <div className="text-sm text-gray-600  space-y-2">
 					
 						<div>
-							<h3 className="font-semibold text-gray-900 mb-2">教員採用試験対策サイト</h3>
+							<h4 className="font-semibold text-gray-900 mb-2">教員採用試験対策サイト</h4>
 							<ul className="list-disc list-inside space-y-1 ml-4">
 								<li><cite className="hover:text-gray-500 not-italic"><a href="https://book.jiji.com/basic/app_guide/" target="_blank" rel="noopener noreferrer">教員採用試験データ｜教員採用試験対策サイト（時事通信出版局）</a></cite></li>
 							</ul>
 						</div>
 
 						<div>
-							<h3 className="font-semibold text-gray-900 mb-2">文部科学省</h3>
+							<h4 className="font-semibold text-gray-900 mb-2">文部科学省</h4>
 							<ul className="list-disc list-inside space-y-1 ml-4">
 								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.mext.go.jp/a_menu/shotou/new-cs/1368209_00001.htm" target="_blank" rel="noopener noreferrer">令和5年度公立高等学校における教育課程の編成・実施状況調査の結果について（文部科学省）</a></cite></li>
 							</ul>
 						</div>
 
             <div>
-              <h3 className="font-semibold text-gray-900  mb-2">大学入試センター</h3>
+              <h4 className="font-semibold text-gray-900  mb-2">大学入試センター</h4>
               <ul className="list-disc list-inside space-y-1 ml-4">
 								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.dnc.ac.jp/albums/abm.php?d=733&f=abm00005261.pdf&n=%E4%BB%A4%E5%92%8C%EF%BC%97%E5%B9%B4%E5%BA%A6%E5%A4%A7%E5%AD%A6%E5%85%A5%E5%AD%A6%E5%85%B1%E9%80%9A%E3%83%86%E3%82%B9%E3%83%88_%E5%AE%9F%E6%96%BD%E7%B5%90%E6%9E%9C%E3%81%AE%E6%A6%82%E8%A6%81.pdf" target="_blank" rel="noopener noreferrer">令和3年度大学入学共通テスト実施結果の概要（大学入試センター）</a></cite></li>
 								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.dnc.ac.jp/albums/abm.php?d=58&f=abm00000702.pdf&n=%E4%BB%A4%E5%92%8C%EF%BC%94%E5%B9%B4%E5%BA%A6%E5%A4%A7%E5%AD%A6%E5%85%A5%E5%AD%A6%E5%85%B1%E9%80%9A%E3%83%86%E3%82%B9%E3%83%88%E5%AE%9F%E6%96%BD%E7%B5%90%E6%9E%9C%E3%81%AE%E6%A6%82%E8%A6%81.pdf" target="_blank" rel="noopener noreferrer">令和4年度大学入学共通テスト実施結果の概要（大学入試センター）</a></cite></li>
@@ -983,7 +983,7 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
             </div>
 						
             <div>
-              <h3 className="font-semibold text-gray-900  mb-2">学術論文・調査報告・その他資料</h3>
+              <h4 className="font-semibold text-gray-900  mb-2">学術論文・調査報告・その他資料</h4>
               <ul className="list-disc list-inside space-y-1 ml-4">
 								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.mext.go.jp/a_menu/shotou/new-cs/1407074.htm" target="_blank" rel="noopener noreferrer">高等学校学習指導要領解説 理科編（文部科学省）</a></cite></li>
 								<li><cite className="hover:text-gray-500 not-italic"><a href="https://www.jstage.jst.go.jp/article/jgeography1889/105/6/105_6_718/_article/-char/ja/" target="_blank" rel="noopener noreferrer">高校の地学教育の現状と課題｜深田地質研究所（吉岡直人）</a></cite></li>

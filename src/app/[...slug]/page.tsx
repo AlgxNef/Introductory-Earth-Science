@@ -101,9 +101,16 @@ export default async function PostPage({ params }: Props) {
                 {postData.part && <span>{postData.part}</span>}
                 {postData.chapter && <span className="mx-1">&gt;</span>}
                 {postData.chapter && <span>{postData.chapter}</span>}
+                {postData.chapter && <span className="mx-1">&gt;</span>}
+                {postData.chapter && <span>{postData.section}</span>}
+                {postData.chapter && <span className="mx-1">&gt;</span>}
+                {postData.chapter && <span>{postData.subsection}</span>}
               </p>
               {postData.updatedat && (
-                <p>更新日: {postData.updatedat}</p>
+								<ul>
+                <li>作成日: {postData.createdat}</li>
+                <li>更新日: {postData.updatedat}</li>
+								</ul>
               )}
             </div>
             

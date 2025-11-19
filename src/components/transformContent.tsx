@@ -37,7 +37,7 @@ const getLabelHtml = (label: string): string => {
       return `<span class="p-0.5 px-2 mx-1 mr-2 font-semibold text-white bg-gray-700 rounded-md">${trimmedLabel}</span>`;
     case '解説':
       return `<span class="p-0.5 px-2 mx-1 mr-2 font-semibold text-gray-800 bg-gray-200 rounded-md">${trimmedLabel}</span>`;
-    case '外語':
+    case '翻訳':
       return `<span class="p-0.5 px-2 mx-1 mr-2 font-semibold text-gray-800 bg-white border-0.5-black border">${trimmedLabel}</span>`;
     case '小話':
       return `<span class="p-0.5 px-2 mx-1 mr-2 font-semibold text-gray-800 bg-gray-200 border-[0.5px] border-gray-300 rounded-sm">${trimmedLabel}</span>`;
