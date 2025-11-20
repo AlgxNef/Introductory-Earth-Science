@@ -33,7 +33,7 @@ export const Grid = ({ viewBox }: GridProps) => {
     ticks.push(
       <React.Fragment key={`x-${i}`}>
         <line x1={i} y1={y} x2={i} y2={y + height} stroke="#e0e0e0" strokeWidth={height/1000} />
-        <text x={i} y={y + (height/40)} fontSize={height/60} fill="#a0a0a0">{i}</text>
+        <text x={i} y={y + height - (height/60)} fontSize={height/60} fill="#a0a0a0">{i}</text>
       </React.Fragment>
     );
   }
@@ -45,7 +45,7 @@ export const Grid = ({ viewBox }: GridProps) => {
     ticks.push(
       <React.Fragment key={`y-${i}`}>
         <line x1={x} y1={i} x2={x + width} y2={i} stroke="#e0e0e0" strokeWidth={height/1000} />
-        <text x={x + (width/60)} y={i} fontSize={height/60} fill="#a0a0a0">{i}</text>
+        <text x={x + (width/60)} y={i} fontSize={height/60} fill="#a0a0a0">{-i}</text>
       </React.Fragment>
     );
   }

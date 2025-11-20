@@ -11,14 +11,11 @@ export const metadata: Metadata = {
 
 export default function ImgGenPage() {
   return (
-    <div className="px-4">
+    <div className="px-4 bg-white text-black">
 			<section className="py-4 text-gray-900 tracking-tight leading-none flex flex-col">
 				<h1 className="text-3xl font-bold text-center">
 					SCIENCE to IMG
 				</h1>
-				<div className="text-xs font-light my-1 flex-1">
-					
-				</div>
 			</section>
       <ImageGenerator />
     </div>

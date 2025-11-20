@@ -29,7 +29,7 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
             props.cx = parseFloat(value);
             break;
           case 'cy':
-            props.cy = parseFloat(value);
+            props.cy = parseFloat(value) * -1;
             break;
           case 'fill':
             props.fill = value.replace(/"/g, '');
@@ -52,7 +52,7 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
 		
     props.r = props.r ?? (unitMode === 'relative' ? 0.1 : 10);
     props.cx = props.cx ?? (unitMode === 'relative' ? 0.5 : 50);
-    props.cy = props.cy ?? (unitMode === 'relative' ? 0.5 : 50);
+    props.cy = props.cy ?? (unitMode === 'relative' ? -0.5 : -50);
 		
     // ★★★ 単位モードに応じて値を変換 ★★★
     let absProps = { ...props };
@@ -81,9 +81,9 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
       if (key && value !== undefined) {
         switch (key) {
           case 'x1': props.x1 = parseFloat(value); break;
-          case 'y1': props.y1 = parseFloat(value); break;
+          case 'y1': props.y1 = parseFloat(value) * -1; break;
           case 'x2': props.x2 = parseFloat(value); break;
-          case 'y2': props.y2 = parseFloat(value); break;
+          case 'y2': props.y2 = parseFloat(value) * -1; break;
           case 'headSize': props.headSize = parseFloat(value); break;
           case 'stroke': props.stroke = value.replace(/"/g, ''); break;
           case 'strokeWidth': props.strokeWidth = parseFloat(value); break;
@@ -95,9 +95,9 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
 
     // デフォルト値の設定
     props.x1 = props.x1 ?? (unitMode === 'relative' ? 0.1 : 10);
-    props.y1 = props.y1 ?? (unitMode === 'relative' ? 0.1 : 10);
+    props.y1 = props.y1 ?? (unitMode === 'relative' ? -0.1 : -10);
     props.x2 = props.x2 ?? (unitMode === 'relative' ? 0.9 : 90);
-    props.y2 = props.y2 ?? (unitMode === 'relative' ? 0.9 : 90);
+    props.y2 = props.y2 ?? (unitMode === 'relative' ? -0.9 : -90);
     props.headSize = props.headSize ?? 10;
 
     let absProps = { ...props };

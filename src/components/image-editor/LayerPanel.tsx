@@ -8,7 +8,7 @@ interface LayerPanelProps {
 
 export const LayerPanel = ({ shapes, onVisibilityChange }: LayerPanelProps) => {
   return (
-    <div className="border rounded bg-white p-2 text-sm w-[10%]">
+    <div className="border rounded bg-white p-2 text-sm w-[20%]">
       <ul>
         {shapes.map(shape => (
           <li

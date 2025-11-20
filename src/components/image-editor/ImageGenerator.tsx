@@ -70,7 +70,7 @@ const ShapeRenderer = ({ shape }: { shape: Shape }) => {
 };
 
 export const ImageGenerator = () => {
-  const [commandText, setCommandText] = useState('circle(r=40, cx=50, cy=50, fill="blue", stroke="black", strokeWidth=2, visible=true)');
+  const [commandText, setCommandText] = useState('circle(r=100, cx=100, cy=100, fill="white", stroke="black", strokeWidth=1, visible=true)');
   const [shapes, setShapes] = useState<Shape[]>([]);
   const [unitMode, setUnitMode] = useState<UnitMode>('absolute');
   const [isAutoFit, setIsAutoFit] = useState(true);
@@ -157,13 +157,13 @@ export const ImageGenerator = () => {
         ]
       },
       keywords: [
-        'circle', 'rect', 'line', 'text', 'formula' // 今後追加するコマンドもここに追加
+        'circle', 'arrow', 'rect', 'line', 'text', 'formula' // 今後追加するコマンドもここに追加
       ],
     });
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-[80vh]">
+    <div className="grid grid-cols-1 md:grid-cols-[40%_60%] gap-4 h-[80vh]">
 		<div className="flex flex-col gap-2">
       {/* 1. 左側：エディタとレイヤーパネル */}
       <div className="flex flex-col gap-4 md:col-span-1 flex-1">
@@ -188,7 +188,7 @@ export const ImageGenerator = () => {
       </div>
 
       {/* 2. 中央：設定パネル */}
-      <div className="p-4 border rounded bg-gray-50 flex flex-col gap-4">
+      <div className="p-4 border rounded bg-gray-50 text-black flex flex-col gap-4">
         {/* ★★★ 単位モード切り替えUIを追加 ★★★ */}
         <div>
           <label className="font-medium text-sm">単位モード</label>
