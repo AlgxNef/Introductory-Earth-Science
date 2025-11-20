@@ -98,21 +98,26 @@ export function getTableOfContents(): TocNode[] {
 // 全ての投稿のパス（slug）を生成する関数
 export function getAllPostSlugs() {
   const toc = getTableOfContents();
-  const slugs: { slug: string[] }[] = [];
+  const paths: { slug: string[] }[] = []; // 型を明記
 
   function traverse(nodes: TocNode[]) {
     nodes.forEach(node => {
-      if (node.url) {
-        slugs.push({ slug: node.id.split('-') });
+      // リンクを持つノード（level 5）のみを対象にする
+      if (node.url && node.id) {
+        // 'slug'というキーを持つオブジェクトを生成する
+        paths.push({ 
+          slug: node.id.split('-') 
+        });
       }
-      if (node.children.length > 0) {
+      // 子ノードがあれば再帰的に探索
+      if (node.children && node.children.length > 0) {
         traverse(node.children);
       }
     });
   }
   
   traverse(toc);
-  return slugs;
+  return paths; // 正しい形式の配列を返す
 }
 
 export interface PostData {

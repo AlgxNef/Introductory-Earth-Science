@@ -23,7 +23,7 @@ interface FormulaCardProps {
 const FormulaCard = ({ title, formula, supplement, symbols, link }: FormulaCardProps) => {
   return (
     <Link href={link} className="block group" id={title}>
-      <div className="flex flex-col h-full border bg-white text-black p-4 shadow-sm hover:bg-slate-100  transition-all duration-300 flex flex-col">
+      <div className="flex flex-col h-full border bg-white text-black p-4 hover:bg-slate-100  transition-all duration-300 flex flex-col">
         {/* タイトル */}
         <div className="text-xl font-bold text-gray-800 h-fit">
           {title}

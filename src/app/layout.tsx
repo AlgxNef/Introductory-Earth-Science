@@ -49,17 +49,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <nav className="relative sticky bottom-0 px-3 py-1 border-t border-black text-right">
               <ul>
                 <li className="mt-1">
-                  <Link href="/about" className="text-gray-600 hover:text-blue-600">
+                  <Link href="/utility/imgeditor" className="text-gray-600 hover:text-slate-800">
+                    ツール
+                  </Link>
+                </li>
+                <li className="mt-1">
+                  <Link href="/about" className="text-gray-600 hover:text-slate-800">
                     このサイトについて
                   </Link>
                 </li>
                 <li className="mt-1">
-                  <Link href="/how-to-use" className="text-gray-600 hover:text-blue-600">
+                  <Link href="/how-to-use" className="text-gray-600 hover:text-slate-800">
                     サイトの使い方
                   </Link>
                 </li>
                 <li className="mt-1">
-                  <Link href="/references" className="text-gray-600 hover:text-blue-600">
+                  <Link href="/references" className="text-gray-600 hover:text-slate-800">
                     引用ポリシー
                   </Link>
                 </li>
