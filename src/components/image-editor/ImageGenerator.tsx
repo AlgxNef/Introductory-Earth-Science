@@ -1,12 +1,13 @@
 // @/components/image-editor/ImageGenerator.tsx
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
-import { parseCommands, Shape, UnitMode } from './parser'; 
+import { parseCommands, Shape, UnitMode, commandDefaults } from './parser';
 import { Switch } from '@headlessui/react';
 import { Grid } from './Grid';
 import { LayerPanel } from './LayerPanel';
+import { InlineMath } from 'react-katex';
 
 // --- 図形を描画するコンポーネント ---
 const ShapeRenderer = ({ shape }: { shape: Shape }) => {
@@ -39,7 +40,7 @@ const ShapeRenderer = ({ shape }: { shape: Shape }) => {
 
       // 3. 矢印の頭の根本までの距離を計算
       // headSizeに応じて三角形をスケールするため、三角形の底辺のX座標(-12)もスケールされる
-      const headBaseLength = 1.2 * headSize; // 12 * (headSize / 10) と同じ
+      const headBaseLength = 1.5 * headSize; // 12 * (headSize / 10) と同じ
 
       // 4. 新しい線の終点を計算
       // 矢印の頭の長さ分だけ、元の終点から始点方向にバックさせる
@@ -53,7 +54,7 @@ const ShapeRenderer = ({ shape }: { shape: Shape }) => {
 
           {/* 矢印の頭 (pathで三角形を描画) */}
           <path
-            d="M0,0 L-12,-5 L-12,5 z" // 矢の先端が(0,0)に来るように三角形を定義
+            d="M0,0 L-15,-5 L-15,5 z" // 矢の先端が(0,0)に来るように三角形を定義
             fill={strokeColor}
             transform={
               `translate(${x2}, ${y2}) ` + // 1. 矢の先端を線の終点に移動
@@ -64,13 +65,56 @@ const ShapeRenderer = ({ shape }: { shape: Shape }) => {
         </g>
       );
     }
+    case 'label': {
+      const { 
+        text, 
+        x, 
+        y, 
+        size = 16, 
+        color = 'black', 
+        isMath = true 
+      } = shape.props;
+			
+      if (!text || text.trim() === '') {
+        return null;
+      }
+      // foreignObjectは位置と大きさを指定する必要がある
+      // Bounding Boxをそのまま利用する
+      const { minX, minY, maxX, maxY } = shape.boundingBox;
+      const width = maxX - minX;
+      const height = maxY - minY;
+
+      return (
+        <foreignObject x={minX} y={minY} width={width} height={height} overflow="visible">
+          <div
+            style={{
+              fontSize: `${size}px`,
+              color: color,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+              width: '100%',
+            }}
+					>
+						<div> {/* ★★★ KaTeX/テキストをもう一段divで囲む ★★★ */}
+							{isMath ? (
+								<InlineMath math={text} />
+							) : (
+								<span>{text}</span>
+							)}
+						</div>
+          </div>
+        </foreignObject>
+      );
+    }
     default:
       return null;
   }
 };
 
 export const ImageGenerator = () => {
-  const [commandText, setCommandText] = useState('circle(r=100, cx=100, cy=100, fill="white", stroke="black", strokeWidth=1, visible=true)');
+  const [commandText, setCommandText] = useState('circle(r=100, cx=0, cy=0, fill="white", stroke="black", strokeWidth=1, visible=true)');
   const [shapes, setShapes] = useState<Shape[]>([]);
   const [unitMode, setUnitMode] = useState<UnitMode>('absolute');
   const [isAutoFit, setIsAutoFit] = useState(true);
@@ -80,6 +124,8 @@ export const ImageGenerator = () => {
   const [isZoomToFit, setIsZoomToFit] = useState(true);
   const [showGrid, setShowGrid] = useState(true);
   const [viewBox, setViewBox] = useState('0 0 100 100');
+	const editorRef = useRef<any>(null);
+	const monacoRef = useRef<any>(null);
 	
   // ★★★ shapesの更新をuseEffectに移動 ★★★
   useEffect(() => {
@@ -93,7 +139,7 @@ export const ImageGenerator = () => {
     if (!isAutoFit || shapes.length === 0) {
       const width = manualWidth || 100;
       const height = manualHeight || 100;
-      setViewBox(`0 0 ${width} ${height}`);
+      setViewBox(`0 ${-height} ${width} ${height}`);
       return;
     }
 
@@ -102,7 +148,7 @@ export const ImageGenerator = () => {
     // 表示されている図形のみを対象にBBoxを計算
     const visibleShapes = shapes.filter(s => s.visible);
     if (visibleShapes.length === 0) {
-      setViewBox('0 0 100 100'); // 表示されている図形がない場合はデフォルトに
+      setViewBox('0 -100 100 100'); // 表示されている図形がない場合はデフォルトに
       return;
     }
 
@@ -131,12 +177,45 @@ export const ImageGenerator = () => {
       )
     );
   };
-	
+
+  const handleInsertCommand = (commandName: string) => {
+    const editor = editorRef.current;
+		const monaco = monacoRef.current;
+		
+    if (!editor || !monaco) return;
+
+    const defaultCommand = commandDefaults[commandName];
+    if (!defaultCommand) return;
+
+    let textToInsert = defaultCommand;
+    const currentText = editor.getValue();
+
+    // 最後の行が空でなければ、改行を追加
+    if (currentText.trim().length > 0 && !currentText.endsWith('\n\n')) {
+      if (currentText.endsWith('\n')) {
+        textToInsert = '\n' + defaultCommand;
+      } else {
+        textToInsert = '\n\n' + defaultCommand;
+      }
+    }
+
+    // エディタの最後にテキストを挿入
+    const lastLine = editor.getModel().getLineCount();
+    const lastColumn = editor.getModel().getLineMaxColumn(lastLine);
+    const range = new monaco.Range(lastLine, lastColumn, lastLine, lastColumn);
+    
+    editor.executeEdits('insert-command', [{ range, text: textToInsert }]);
+    editor.focus(); // 挿入後にエディタにフォーカスを戻す
+  };
+
+
   // ★★★ EditorのonMountイベントで言語定義を行うための関数 ★★★
   const handleEditorDidMount = (editor: any, monaco: any) => {
     // カスタム言語'imggen-lang'を登録
+		editorRef.current = editor;
     monaco.languages.register({ id: 'imggen-lang' });
-
+		monacoRef.current = monaco;
+		
     // シンタックスハイライトのルールを定義
     monaco.languages.setMonarchTokensProvider('imggen-lang', {
       tokenizer: {
@@ -157,17 +236,26 @@ export const ImageGenerator = () => {
         ]
       },
       keywords: [
-        'circle', 'arrow', 'rect', 'line', 'text', 'formula' // 今後追加するコマンドもここに追加
+        'circle', 'arrow', 'label', 'rect', 'line', 'text', 'formula' // 今後追加するコマンドもここに追加
       ],
     });
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[40%_60%] gap-4 h-[80vh]">
-		<div className="flex flex-col gap-2">
+    <div className="grid grid-cols-1 md:grid-cols-[60%_40%] h-[90vh]">
+		<div className="flex flex-col gap-2 px-2">
       {/* 1. 左側：エディタとレイヤーパネル */}
       <div className="flex flex-col gap-4 md:col-span-1 flex-1">
 			<div className="flex-1 flex gap-1">
+        <div className="p-2 border rounded bg-gray-50">
+          <h3 className="text-sm font-semibold mb-2">図形を追加</h3>
+          <div className="flex flex-wrap gap-2">
+            <button onClick={() => handleInsertCommand('circle')} className="px-3 py-1 text-sm bg-white border rounded hover:bg-gray-100">円</button>
+            <button onClick={() => handleInsertCommand('arrow')} className="px-3 py-1 text-sm bg-white border rounded hover:bg-gray-100">矢印</button>
+            <button onClick={() => handleInsertCommand('label')} className="px-3 py-1 text-sm bg-white border rounded hover:bg-gray-100">ラベル</button>
+            <button onClick={() => handleInsertCommand('axis2d')} className="px-3 py-1 text-sm bg-white border rounded hover:bg-gray-100">2D軸</button>
+          </div>
+        </div>
 				<div className="flex-1 border rounded">
 					<Editor
 						height="100%"
@@ -193,8 +281,8 @@ export const ImageGenerator = () => {
         <div>
           <label className="font-medium text-sm">単位モード</label>
           <div className="flex gap-2 mt-1">
-            <button onClick={() => setUnitMode('absolute')} className={`px-3 py-1 text-sm rounded ${unitMode === 'absolute' ? 'bg-slate-600 text-white' : 'bg-gray-200'}`}>絶対値</button>
-            <button onClick={() => setUnitMode('relative')} className={`px-3 py-1 text-sm rounded ${unitMode === 'relative' ? 'bg-slate-600 text-white' : 'bg-gray-200'}`}>相対値</button>
+            <button onClick={() => setUnitMode('absolute')} className={`px-3 py-1 text-sm rounded ${unitMode === 'absolute' ? 'bg-slate-600 text-white' : 'bg-gray-200'}`}>図モード</button>
+            <button onClick={() => setUnitMode('relative')} className={`px-3 py-1 text-sm rounded ${unitMode === 'relative' ? 'bg-slate-600 text-white' : 'bg-gray-200'}`}>グラフモード</button>
           </div>
         </div>
         
@@ -273,14 +361,14 @@ export const ImageGenerator = () => {
         </div>
 			</div>
       {/* 3. 右側 */}
-      <div className="border rounded p-4 flex items-center justify-center overflow-auto bg-white">
+      <div className="rounded p-4 flex items-center justify-center overflow-auto bg-gray-50">
         <svg 
           viewBox={viewBox}
           className={isZoomToFit ? "w-full h-full" : ""}
           style={!isZoomToFit ? { width: manualWidth, height: manualHeight } : {}}
           preserveAspectRatio="xMidYMid meet"
         >
-          {showGrid && <Grid viewBox={viewBox} />}
+          {showGrid && <Grid viewBox={viewBox} unitMode={unitMode} />}
 					{shapes.map((shape) => (
             <ShapeRenderer key={shape.id} shape={shape} />
           ))}

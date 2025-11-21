@@ -1,4 +1,5 @@
 import React from 'react';
+type UnitMode = 'absolute' | 'relative';
 
 // 見やすい目盛りのステップを計算するヘルパー関数
 const calculateTickStep = (range: number): number => {
@@ -14,9 +15,10 @@ const calculateTickStep = (range: number): number => {
 
 interface GridProps {
   viewBox: string;
+	unitMode: UnitMode;
 }
 
-export const Grid = ({ viewBox }: GridProps) => {
+export const Grid = ({ viewBox, unitMode }: GridProps) => {
   const [x, y, width, height] = viewBox.split(' ').map(Number);
   
   // viewBoxが無効な場合は何も描画しない
@@ -25,15 +27,17 @@ export const Grid = ({ viewBox }: GridProps) => {
   }
 
   const ticks = [];
-  
+  const scaleFactor = unitMode === 'relative' ? 100 : 1;
+	
   // X軸の目盛りを計算
   const xStep = calculateTickStep(width);
   const startX = Math.ceil(x / xStep) * xStep;
   for (let i = startX; i < x + width; i += xStep) {
+		const displayValue = i / scaleFactor;
     ticks.push(
       <React.Fragment key={`x-${i}`}>
         <line x1={i} y1={y} x2={i} y2={y + height} stroke="#e0e0e0" strokeWidth={height/1000} />
-        <text x={i} y={y + height - (height/60)} fontSize={height/60} fill="#a0a0a0">{i}</text>
+        <text x={i} y={y + height - (height/60)} fontSize={height/60} fill="#a0a0a0">{displayValue}</text>
       </React.Fragment>
     );
   }
@@ -42,10 +46,11 @@ export const Grid = ({ viewBox }: GridProps) => {
   const yStep = calculateTickStep(height);
   const startY = Math.ceil(y / yStep) * yStep;
   for (let i = startY; i < y + height; i += yStep) {
+		const displayValue = -i / scaleFactor;
     ticks.push(
       <React.Fragment key={`y-${i}`}>
         <line x1={x} y1={i} x2={x + width} y2={i} stroke="#e0e0e0" strokeWidth={height/1000} />
-        <text x={x + (width/60)} y={i} fontSize={height/60} fill="#a0a0a0">{-i}</text>
+        <text x={x + (width/60)} y={i} fontSize={height/60} fill="#a0a0a0">{displayValue}</text>
       </React.Fragment>
     );
   }

@@ -20,7 +20,7 @@ export const LayerPanel = ({ shapes, onVisibilityChange }: LayerPanelProps) => {
           >
             <span className="font-mono">{`${shape.id}: ${shape.type}`}</span>
             <button
-              className="p-1 rounded"
+              className="p-1 rounded cursor-pointer"
               title={shape.visible ? '非表示にする' : '表示する'}
             >
               {shape.visible ? <VscEye /> : <VscEyeClosed />}
