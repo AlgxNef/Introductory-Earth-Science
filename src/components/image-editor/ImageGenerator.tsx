@@ -9,6 +9,25 @@ import { Grid } from './Grid';
 import { LayerPanel } from './LayerPanel';
 import { InlineMath } from 'react-katex';
 
+import { exportAsSVG, exportAsRaster } from './exporter';
+
+/**
+ * 数学的なモジュロ演算 (常に 0 <= result < m) を行います。
+ */
+function mathMod(n: number, m: number): number {
+    return ((n % m) + m) % m;
+}
+
+// 例: mathMod(-30, 360) は 330 を返します。
+
+const polarToCartesian = (centerX: number, centerY: number, radiusX: number, radiusY: number, angleInDegrees: number) => {
+  const angleInRadians = (angleInDegrees) * Math.PI / 180.0;
+  return {
+    x: centerX + (radiusX * Math.cos(angleInRadians)),
+    y: (centerY + (radiusY * Math.sin(angleInRadians)))* -1
+  };
+};
+
 // --- 図形を描画するコンポーネント ---
 const ShapeRenderer = ({ shape }: { shape: Shape }) => {
 	if (!shape.visible) return null;
@@ -17,7 +36,14 @@ const ShapeRenderer = ({ shape }: { shape: Shape }) => {
       return (
         <circle 
           {...shape.props}
-          fill={shape.props.fill || 'white'}
+          fill={shape.props.fill || 'none'}
+          stroke={shape.props.stroke || 'black'}
+        />
+      );
+    case 'line':
+      return (
+        <line 
+          {...shape.props}
           stroke={shape.props.stroke || 'black'}
         />
       );
@@ -108,6 +134,47 @@ const ShapeRenderer = ({ shape }: { shape: Shape }) => {
         </foreignObject>
       );
     }
+    case 'arc': {
+      const { 
+        cx, cy, rx, ry, 
+        startAngle, endAngle, 
+        ...restProps 
+      } = shape.props;
+
+      const start = polarToCartesian(cx, cy, rx, ry, startAngle);
+      const end = polarToCartesian(cx, cy, rx, ry, endAngle);
+			
+			// 1. 角度を0〜360度の範囲に正規化する
+			const normalizedStart = mathMod(startAngle, 360);
+			const normalizedEnd = mathMod(endAngle, 360);
+
+			// 2. 差分を計算する
+			// endAngleがstartAngleより大きい場合も、小さい場合も正しく処理されます。
+			let angleDifference = normalizedEnd - normalizedStart;
+
+			// 3. 差分が負の値の場合、360度を足して時計回りの角度差（0〜360）に変換する
+			if (angleDifference < 0) {
+					angleDifference += 360;
+			}
+			
+      const largeArcFlag = angleDifference <= 180 ? "0" : "1";
+			
+      const d = [
+        "M", start.x, start.y, 
+        "A", rx, ry, 0, largeArcFlag, 0, end.x, end.y
+      ].join(" ");
+
+      return (
+        <path
+          d={d}
+          fill="none"
+          stroke={restProps.stroke || "black"}
+          strokeWidth={restProps.strokeWidth ?? 1}
+          {...restProps}
+        />
+      );
+    }
+		
     default:
       return null;
   }
@@ -126,8 +193,8 @@ export const ImageGenerator = () => {
   const [viewBox, setViewBox] = useState('0 0 100 100');
 	const editorRef = useRef<any>(null);
 	const monacoRef = useRef<any>(null);
+	const svgRef = useRef<SVGSVGElement>(null);
 	
-  // ★★★ shapesの更新をuseEffectに移動 ★★★
   useEffect(() => {
     const canvasSize = { width: manualWidth, height: manualHeight };
     const parsedShapes = parseCommands(commandText, unitMode, canvasSize);
@@ -193,9 +260,9 @@ export const ImageGenerator = () => {
     // 最後の行が空でなければ、改行を追加
     if (currentText.trim().length > 0 && !currentText.endsWith('\n\n')) {
       if (currentText.endsWith('\n')) {
-        textToInsert = '\n' + defaultCommand;
+        textToInsert = defaultCommand;
       } else {
-        textToInsert = '\n\n' + defaultCommand;
+        textToInsert = '\n' + defaultCommand;
       }
     }
 
@@ -207,7 +274,6 @@ export const ImageGenerator = () => {
     editor.executeEdits('insert-command', [{ range, text: textToInsert }]);
     editor.focus(); // 挿入後にエディタにフォーカスを戻す
   };
-
 
   // ★★★ EditorのonMountイベントで言語定義を行うための関数 ★★★
   const handleEditorDidMount = (editor: any, monaco: any) => {
@@ -236,11 +302,26 @@ export const ImageGenerator = () => {
         ]
       },
       keywords: [
-        'circle', 'arrow', 'label', 'rect', 'line', 'text', 'formula' // 今後追加するコマンドもここに追加
+        'circle', 'arrow', 'label', 'axis2d', 'arc', 'angle', 'rect', 'line', 'text', 'formula'
       ],
     });
   };
 
+  const handleExport = (format: 'svg' | 'png' | 'jpeg' | 'webp') => {
+    if (!svgRef.current) {
+      console.error("SVG element not found.");
+      return;
+    }
+    
+    const filename = `science-to-img-${new Date().getTime()}`;
+
+    if (format === 'svg') {
+      exportAsSVG(svgRef.current, filename);
+    } else {
+      exportAsRaster(svgRef.current, filename, format);
+    }
+  };
+	
   return (
     <div className="grid grid-cols-1 md:grid-cols-[60%_40%] h-[90vh]">
 		<div className="flex flex-col gap-2 px-2">
@@ -249,12 +330,30 @@ export const ImageGenerator = () => {
 			<div className="flex-1 flex gap-1">
         <div className="p-2 border rounded bg-gray-50">
           <h3 className="text-sm font-semibold mb-2">図形を追加</h3>
-          <div className="flex flex-wrap gap-2">
-            <button onClick={() => handleInsertCommand('circle')} className="px-3 py-1 text-sm bg-white border rounded hover:bg-gray-100">円</button>
-            <button onClick={() => handleInsertCommand('arrow')} className="px-3 py-1 text-sm bg-white border rounded hover:bg-gray-100">矢印</button>
-            <button onClick={() => handleInsertCommand('label')} className="px-3 py-1 text-sm bg-white border rounded hover:bg-gray-100">ラベル</button>
-            <button onClick={() => handleInsertCommand('axis2d')} className="px-3 py-1 text-sm bg-white border rounded hover:bg-gray-100">2D軸</button>
-          </div>
+					<div className="flex flex-col gap-2">
+						{/* commandDefaultsオブジェクトのキーをマップしてボタンを自動生成 */}
+						{Object.keys(commandDefaults).map((commandName) => (
+							<button
+								key={commandName}
+								onClick={() => handleInsertCommand(commandName)}
+								className="px-3 py-1 text-sm text-center bg-white border rounded hover:bg-gray-100"
+							>
+								{
+									{
+										line: '線分',
+										circle: '円',
+										arrow: '矢印',
+										label: 'ラベル',
+										axis2d: '2D軸',
+										arc: '弧',
+										angle: '角度表示',
+										polar_line: '角度と長さの線分',
+										polar_arrow: '角度と長さの矢印',
+									}[commandName] || commandName
+								}
+							</button>
+						))}
+					</div>
         </div>
 				<div className="flex-1 border rounded">
 					<Editor
@@ -359,16 +458,30 @@ export const ImageGenerator = () => {
 						<Switch.Label className="ml-3 font-medium text-sm text-gray-700">目盛り表示</Switch.Label>
 					</Switch.Group>
         </div>
+        <div className="mt-auto pt-4 border-t">
+          <h3 className="font-medium text-sm mb-2">エクスポート</h3>
+          <div className="grid grid-cols-2 gap-2">
+            <button onClick={() => handleExport('svg')} className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700">SVG</button>
+            <button onClick={() => handleExport('png')} className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">PNG</button>
+            <button onClick={() => handleExport('jpeg')} className="px-3 py-1 text-sm bg-orange-600 text-white rounded hover:bg-orange-700">JPG</button>
+            <button onClick={() => handleExport('webp')} className="px-3 py-1 text-sm bg-purple-600 text-white rounded hover:bg-purple-700">WEBP</button>
+          </div>
+        </div>
 			</div>
       {/* 3. 右側 */}
       <div className="rounded p-4 flex items-center justify-center overflow-auto bg-gray-50">
         <svg 
+					ref={svgRef}
           viewBox={viewBox}
           className={isZoomToFit ? "w-full h-full" : ""}
           style={!isZoomToFit ? { width: manualWidth, height: manualHeight } : {}}
           preserveAspectRatio="xMidYMid meet"
         >
-          {showGrid && <Grid viewBox={viewBox} unitMode={unitMode} />}
+          {showGrid && (
+            <g id="grid-area">
+              <Grid viewBox={viewBox} unitMode={unitMode} />
+            </g>
+          )}
 					{shapes.map((shape) => (
             <ShapeRenderer key={shape.id} shape={shape} />
           ))}

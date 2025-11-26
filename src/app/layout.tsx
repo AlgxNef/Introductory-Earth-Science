@@ -13,13 +13,16 @@ export const metadata: Metadata = {
     default: '理系地学入門',
     template: '%s｜理系地学入門',
   },
-  // 長い方の説明文
+  verification: {
+    // content="..." の中身の文字列をここに貼り付ける
+    google: 'KsSKP47R7mQ6jwuEFJWdyU6ExhmN-Z9Hll2pQ5eRE7I', 
+  },
   description: 'Webで読める理系地学に関わる知識本。物理・化学の法則をもとに、広大なスケールと先人の知恵を線でつなぎます。',
-		icons: {
-			icon: [
-				{ url: '/icon/Logo.svg', type: 'image/svg+xml' }
-			],
-		},
+	icons: {
+		icon: [
+			{ url: '/icon/Logo.svg', type: 'image/svg+xml' }
+		],
+	},
   openGraph: {
     title: '理系地学入門',
     // SNSシェア用には短い方の説明文
