@@ -1,6 +1,8 @@
 import { MetadataRoute } from 'next';
 import { getTableOfContents } from '@/lib/posts'; // posts.tsからヘルパーをインポート
 
+export const dynamic = 'force-static';
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = 'https://i-earth.pages.dev';
 
