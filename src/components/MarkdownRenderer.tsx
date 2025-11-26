@@ -1,7 +1,9 @@
 'use client';
 
 import Image from 'next/image';
-import parse, { domToReact, Element } from 'html-react-parser';
+import Link from 'next/link';
+import parse, { domToReact, Element, HTMLReactParserOptions } from 'html-react-parser';
+import { VscOpenPreview } from 'react-icons/vsc';
 
 interface MarkdownRendererProps {
   htmlString: string;

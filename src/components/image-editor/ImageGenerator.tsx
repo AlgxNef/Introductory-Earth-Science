@@ -2,8 +2,10 @@
 'use client';
 
 import { useState, useMemo, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Editor from '@monaco-editor/react';
 import { parseCommands, Shape, UnitMode, commandDefaults } from './parser';
+import { getImageSourceById, getAllImageSources } from '@/lib/imageLibrary'; 
 import { Switch } from '@headlessui/react';
 import { Grid } from './Grid';
 import { LayerPanel } from './LayerPanel';
@@ -35,6 +37,14 @@ const ShapeRenderer = ({ shape }: { shape: Shape }) => {
     case 'circle':
       return (
         <circle 
+          {...shape.props}
+          fill={shape.props.fill || 'none'}
+          stroke={shape.props.stroke || 'black'}
+        />
+      );
+    case 'ellipse':
+      return (
+        <ellipse 
           {...shape.props}
           fill={shape.props.fill || 'none'}
           stroke={shape.props.stroke || 'black'}
@@ -181,7 +191,11 @@ const ShapeRenderer = ({ shape }: { shape: Shape }) => {
 };
 
 export const ImageGenerator = () => {
-  const [commandText, setCommandText] = useState('circle(r=100, cx=0, cy=0, fill="white", stroke="black", strokeWidth=1, visible=true)');
+  const [commandText, setCommandText] = useState('');
+  const [library, setLibrary] = useState<Record<string, string>>({});
+  const searchParams = useSearchParams();
+  const loadId = searchParams.get('load');
+	
   const [shapes, setShapes] = useState<Shape[]>([]);
   const [unitMode, setUnitMode] = useState<UnitMode>('absolute');
   const [isAutoFit, setIsAutoFit] = useState(true);
@@ -194,6 +208,22 @@ export const ImageGenerator = () => {
 	const editorRef = useRef<any>(null);
 	const monacoRef = useRef<any>(null);
 	const svgRef = useRef<SVGSVGElement>(null);
+	
+  useEffect(() => {
+    // ライブラリデータを読み込んでstateにセット
+    setLibrary(getAllImageSources());
+
+    if (loadId) {
+      const source = getImageSourceById(loadId);
+      if (source) {
+        setCommandText(source);
+      } else {
+        setCommandText(`// Error: Image with ID "${loadId}" not found.`);
+      }
+    } else {
+      setCommandText('axis2d()');
+    }
+  }, [loadId]);
 	
   useEffect(() => {
     const canvasSize = { width: manualWidth, height: manualHeight };
@@ -302,7 +332,16 @@ export const ImageGenerator = () => {
         ]
       },
       keywords: [
-        'circle', 'arrow', 'label', 'axis2d', 'arc', 'angle', 'rect', 'line', 'text', 'formula'
+				'label', 
+				'line', 
+				'polar_line', 
+				'arrow', 
+				'polar_arrow', 
+				'axis2d', 
+				'arc', 
+				'angle', 
+        'circle',
+				'rect', 
       ],
     });
   };
@@ -322,6 +361,11 @@ export const ImageGenerator = () => {
     }
   };
 	
+  const handleLibrarySelect = (id: string) => {
+    if (id && library[id]) {
+      setCommandText(library[id]);
+    }
+  };
   return (
     <div className="grid grid-cols-1 md:grid-cols-[60%_40%] h-[90vh]">
 		<div className="flex flex-col gap-2 px-2">
@@ -342,6 +386,7 @@ export const ImageGenerator = () => {
 									{
 										line: '線分',
 										circle: '円',
+										ellipse: '楕円',
 										arrow: '矢印',
 										label: 'ラベル',
 										axis2d: '2D軸',
@@ -354,6 +399,21 @@ export const ImageGenerator = () => {
 							</button>
 						))}
 					</div>
+        </div>
+        <div className="p-2 border rounded bg-gray-50">
+          <label htmlFor="library-select" className="text-sm font-semibold mb-1 block">ライブラリから読み込み</label>
+          <select 
+            id="library-select"
+            onChange={(e) => handleLibrarySelect(e.target.value)}
+            className="w-full p-2 border rounded"
+            // URLパラメータで読み込まれたIDをデフォルトで選択状態にする
+            value={loadId || ""}
+          >
+            <option value="">-- IDを選択 --</option>
+            {Object.keys(library).map(id => (
+              <option key={id} value={id}>{id}</option>
+            ))}
+          </select>
         </div>
 				<div className="flex-1 border rounded">
 					<Editor

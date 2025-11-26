@@ -1,8 +1,9 @@
+import { vec3, mat4 } from 'gl-matrix';
 	let nextId = 0;
 // --- 図形オブジェクトの型定義 ---
 export interface Shape {
 	id: number;
-  type: 'circle' | 'rect' | 'arrow' | 'label' | 'axis2d' | 'arc' | 'angle' | 'line' | 'polar_arrow' | 'polar_line' | 'unknown';
+  type: 'ellipse' | 'circle' | 'rect' | 'arrow' | 'label' | 'axis2d' | 'arc' | 'angle' | 'line' | 'polar_arrow' | 'polar_line' | 'ellipsoid_slice' | 'ellipsoid_slice_polar' | 'unknown';
   props: any;
 	visible: boolean;
 	boundingBox: { minX: number; minY: number; maxX: number; maxY: number };
@@ -38,7 +39,6 @@ const evaluateExpression = (expr: string): number => {
 function mathMod(n: number, m: number): number {
     return ((n % m) + m) % m;
 }
-
 // 例: mathMod(-30, 360) は 330 を返します。
 
 export const commandDefaults: Record<string, string> = {
@@ -51,6 +51,9 @@ export const commandDefaults: Record<string, string> = {
   arc: 'arc(cx=0, cy=0, rx=50, startAngle=0, endAngle=90, strokeWidth=5, stroke="blue")',
   angle: 'angle(cx=0, cy=0, r=25, startAngle=0, endAngle=45, text="\\theta", textSize=35, textOffset=1.3)',
   circle: 'circle(r=100, cx=0, cy=0, fill="none")',
+  ellipse: 'ellipse(rx=100, ry=80, cx=0, cy=0, fill="none")',
+  ellipsoid_slice: 'ellipsoid_slice(viewAngle=30, viewDistance=200, ox=0, cz=50, edgeX=100, edgeY=0, side="front")',
+  ellipsoid_slice_polar: 'ellipsoid_slice_polar(cx=100, cy=100, cz=100, angle=0, viewAngle=30, side="front")',
 };
 
 // --- コマンドごとのパーサーを定義 ---
@@ -157,6 +160,65 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
       maxY: absProps.cy + absProps.r,
     };
     return { id: nextId++, type: 'circle', props: absProps, visible, boundingBox };
+  },
+  	
+  ellipse: (args, unitMode, canvasSize) => {
+    const props: any = {};
+    let visible = true;
+    args.split(',').forEach(arg => {
+      const [key, value] = arg.trim().split('=').map(s => s.trim());
+      if (key && value !== undefined) {
+        switch (key) {
+          case 'rx':
+            props.rx = parseFloat(value);
+            break;
+          case 'ry':
+            props.ry = parseFloat(value);
+            break;
+          case 'cx':
+            props.cx = parseFloat(value);
+            break;
+          case 'cy':
+            props.cy = parseFloat(value) * -1;
+            break;
+          case 'fill':
+            props.fill = value.replace(/"/g, '');
+            break;
+          case 'stroke':
+            props.stroke = value.replace(/"/g, '');
+            break;
+          case 'strokeWidth':
+            props.strokeWidth = parseFloat(value) / 3;
+            break;
+          case 'opacity':
+            props.opacity = parseFloat(value); // 0.0 ~ 1.0 の値
+            break;
+          case 'visible':
+            visible = value.toLowerCase() === 'true';
+            break;
+        }
+      }
+    });
+		
+    props.r = props.r ?? (unitMode === 'relative' ? 0.1 : 10);
+    props.cx = props.cx ?? 0;
+    props.cy = props.cy ?? 0;
+		
+    // ★★★ 単位モードに応じて値を変換 ★★★
+    let absProps = { ...props };
+    if (unitMode === 'relative') {
+      absProps.r = props.r * 100;
+      absProps.cx = props.cx * 100;
+      absProps.cy = props.cy * 100;
+    }
+
+    const boundingBox = {
+      minX: absProps.cx - absProps.r,
+      minY: absProps.cy - absProps.r,
+      maxX: absProps.cx + absProps.r,
+      maxY: absProps.cy + absProps.r,
+    };
+    return { id: nextId++, type: 'ellipse', props: absProps, visible, boundingBox };
   },
   
   arrow: (args, unitMode, canvasSize) => {
@@ -554,6 +616,157 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
 
     return result;
   },
+
+  ellipsoid_slice: (args, unitMode, canvasSize) => {
+    const props: any = {};
+    let visible = true;
+
+    args.split(',').forEach(arg => {
+      const [key, value] = arg.trim().split('=').map(s => s.trim());
+      if (key && value !== undefined) {
+        switch (key) {
+          // ➀ 引数をパース
+          case 'viewAngle': props.viewAngle = parseFloat(value); break;
+          case 'viewDistance': props.viewDistance = parseFloat(value); break;
+          case 'ox': props.ox = parseFloat(value); break;
+          case 'cz': props.cz = parseFloat(value); break;
+          case 'edgeX': props.edgeX = parseFloat(value); break;
+          case 'edgeY': props.edgeY = parseFloat(value); break;
+          case 'side': props.side = value.replace(/"/g, ''); break; // "front" or "back"
+          // デザインと基本属性
+          case 'stroke': props.stroke = value.replace(/"/g, ''); break;
+          case 'strokeWidth': props.strokeWidth = parseFloat(value); break;
+          case 'visible': visible = value.toLowerCase() === 'true'; break;
+        }
+      }
+    });
+
+    // デフォルト値
+    props.viewAngle = props.viewAngle ?? 30;
+    props.viewDistance = props.viewDistance ?? 200;
+    props.ox = props.ox ?? 0;
+    props.cz = props.cz ?? 50;
+    props.edgeX = props.edgeX ?? 100;
+    props.edgeY = props.edgeY ?? 0;
+    props.side = props.side ?? "front";
+
+    if (!visible) return [];
+
+    // ➁ 視点の高さを求める (Y座標)
+    const viewHeightY = (props.viewDistance + props.cz) * Math.tan(props.viewAngle * Math.PI / 180.0);
+    
+    // ➂ 2*ccy を求める
+    const two_ccy = viewHeightY * 2 * props.cz / (props.viewDistance + 2 * props.cz);
+    const ccy = two_ccy / 2;
+
+    // ➃ 切断面の中心のズレを求める
+    const centerOffsetY = (viewHeightY * props.cz / (props.viewDistance + props.cz)) - ccy;
+
+    // ➄ cox, coy を求める
+    const cox = props.ox;
+    const coy = props.edgeY - centerOffsetY;
+
+    // ➅ ccx を求める
+    const term = 1 - (Math.pow(props.edgeY - coy, 2) / Math.pow(ccy, 2));
+    if (term < 0) { // 物理的にありえない場合
+      return { id: nextId++, type: 'unknown', props:{}, visible: true, boundingBox: {minX:0, minY:0, maxX:0, maxY:0}, errors: ['Invalid parameters for ellipsoid_slice'] };
+    }
+    const ccx = Math.sqrt(Math.pow(props.edgeX - cox, 2) / term);
+    
+    // ⑥ edgeXmax, edgeXmin
+    const edgeXmax = props.edgeX;
+    const edgeXmin = edgeXmax - 2 * ccx;
+
+    // ⑦ 楕円弧の始点角・終点角を計算
+    // 点 (edgeXmax, edgeY) と (edgeXmin, edgeY) が楕円上のどの角度に対応するかを逆算
+    // atan2((y-coy)/ry, (x-cox)/rx) を使う
+    const startPointAngleRad = Math.atan2((props.edgeY - coy) / ccy, (edgeXmax - cox) / ccx);
+    const endPointAngleRad = Math.atan2((props.edgeY - coy) / ccy, (edgeXmin - cox) / ccx);
+    
+    // ラジアンを度に変換
+    let startAngle = startPointAngleRad * 180 / Math.PI;
+    let endAngle = endPointAngleRad * 180 / Math.PI;
+
+    // ⑦ 「手前」か「奥」かで描画する半円を決定
+    // SVGのarcコマンドは反時計回りに描画されるため、角度の大小を調整
+    if (props.side === "front") { // Y座標がedgeY以下の部分
+      // 180度から360度(0度)の範囲
+      if (startAngle < 0) startAngle += 360;
+      if (endAngle < 0) endAngle += 360;
+    } else { // "back" Y座標がedgeY以上の部分
+      // 0度から180度の範囲
+      // startAngleとendAngleは既にこの範囲のはず
+    }
+
+    // Y軸反転をarcパーサーに任せるため、coyを反転させる
+    const finalCoy = -coy;
+    
+    // arcコマンド用の引数文字列を構築
+    let arcArgs = `cx=${cox}, cy=${finalCoy}, rx=${ccx}, ry=${ccy}, startAngle=${startAngle}, endAngle=${endAngle}`;
+    if (props.stroke) arcArgs += `, stroke="${props.stroke}"`;
+    if (props.strokeWidth) arcArgs += `, strokeWidth=${props.strokeWidth}`;
+
+    // 既存のarcパーサーを呼び出す
+    return commandParsers.arc(arcArgs, 'absolute', canvasSize);
+  },
+	
+	
+  ellipsoid_slice_polar: (args, unitMode, canvasSize) => {
+    const props: any = {};
+    
+    // 1. 引数をパース
+    args.split(',').forEach(arg => {
+      const [key, value] = arg.trim().split('=').map(s => s.trim());
+      if (key && value !== undefined) {
+        switch (key) {
+          // このコマンド固有の引数
+          case 'cx': props.cx = parseFloat(value); break; // 3D空間での楕円球半径X軸方向
+          case 'cy': props.cy = parseFloat(value); break; // 3D空間での楕円球半径Y軸方向
+          case 'cz': props.cz = parseFloat(value); break; // 3D空間での楕円球半径Z軸方向
+          case 'angle': props.angle = parseFloat(value); break; // 3D空間での円の回転角(度)
+          case 'ox': props.ox = parseFloat(value); break; // 3D空間での楕円球中心X座標
+					case 'oy': props.oy = parseFloat(value); break; // 3D空間での楕円球中心Y座標
+          
+          // ellipsoid_sliceに引き継ぐ共通の引数
+          case 'viewAngle': props.viewAngle = parseFloat(value); break;
+          case 'viewDistance': props.viewDistance = parseFloat(value); break;
+          case 'side': props.side = value.replace(/"/g, ''); break;
+          case 'stroke': props.stroke = value.replace(/"/g, ''); break;
+          case 'strokeWidth': props.strokeWidth = parseFloat(value); break;
+          case 'visible': props.visible = value.toLowerCase() === 'true'; break;
+        }
+      }
+    });
+
+    // デフォルト値
+    props.cx = props.cx ?? 100;
+    props.cy = props.cy ?? 100;
+    props.cz = props.cz ?? 100;
+    props.ox = props.ox ?? 0;
+    props.oy = props.oy ?? 0;
+    props.r = props.r ?? 100;
+    props.angle = props.angle ?? 0;
+    
+    // 2. 新しい引数から、ellipsoid_sliceが要求する引数を計算
+    const angleRad = props.angle * Math.PI / 180.0;
+    const edgeX = Math.sqrt(props.cx * props.cx + props.cy * props.cy) * Math.cos(angleRad) + props.ox;
+    const edgeY = Math.sqrt(props.cx * props.cx + props.cy * props.cy) * Math.sin(angleRad) + props.oy;
+    
+    // 3. ellipsoid_sliceパーサーに渡すための引数文字列を構築
+    let modifiedArgs = `edgeX=${edgeX}, edgeY=${edgeY}, cz=${props.cz}, ox=${props.ox}`;
+
+    // 共通の引数を追加
+    if (props.viewAngle) modifiedArgs += `, viewAngle=${props.viewAngle}`;
+    if (props.viewDistance) modifiedArgs += `, viewDistance=${props.viewDistance}`;
+    if (props.side) modifiedArgs += `, side="${props.side}"`;
+    if (props.stroke) modifiedArgs += `, stroke="${props.stroke}"`;
+    if (props.strokeWidth) modifiedArgs += `, strokeWidth=${props.strokeWidth}`;
+    if (props.visible !== undefined) modifiedArgs += `, visible=${props.visible}`;
+
+    // 4. 構築した引数で、既存のellipsoid_sliceパーサーを呼び出す
+    return commandParsers.ellipsoid_slice(modifiedArgs, unitMode, canvasSize);
+  },
+	
 	// 今後、rectコマンドを追加する場合
   // rect: (args) => { ... },
 };
