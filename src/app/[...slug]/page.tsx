@@ -67,7 +67,7 @@ export default async function PostPage({ params }: Props) {
     if (!slug?.length) notFound();
 
     const postData = await getPostData(slug);
-
+		
     // --- 演習問題の処理ロジック ---
     const exerciseDelimiter = '<h2>演習問題</h2>';
     const contentParts = postData.contentHtml.split(exerciseDelimiter);

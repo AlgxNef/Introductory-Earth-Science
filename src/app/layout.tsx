@@ -75,7 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </nav>
           </aside>
 
-          <main className="ml-80 print:m-0 flex-1 p0">
+          <main className="ml-80 print:m-0 flex-1 p-0 bg-white text-black">
             {children}
           </main>
         </div>

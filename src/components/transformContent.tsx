@@ -284,30 +284,6 @@ transformed = transformed.replace(targetTagsRegex, (match) => {
   // =================================================================
   transformed = transformed.replace(/<figure>/g, '<figure class="mt-auto text-sm text-right">');
 	
-	/**
- * <h5>解法X</h5> の形式をTailwind CSSでデザインされた<div>に変換するロジック
- */
-// <h5>解法X</h5> のパターンにマッチする正規表現
-// Xは半角数字
-// キャプチャグループ1: 解法X (例: 解法1)
-const h5SolutionRegex = /<h5>(解法\d+)<\/h5>/g;
-
-transformed = transformed.replace(h5SolutionRegex, (match, innerContent) => {
-    // innerContent は "解法1", "解法2" など
-
-    // 適用する Tailwind CSS クラス
-    // 外部のコンテンツと区別するために、左ボーダーと背景色を適用
-    const divClasses = "bg-blue-50 border-l-4 border-blue-500 px-4 py-3 my-4";
-    
-    // 見出しのテキストに適用するクラス
-    const textClasses = "text-xl font-extrabold text-blue-800 tracking-wide";
-
-    // <h5>タグの中身（解法X）にデザインを適用
-    const innerHtml = `<span class="${textClasses}">${innerContent}</span>`;
-
-    // 全体を新しい<div>構造で囲んで返す
-    return `<div class="${divClasses}">${innerHtml}</div>`;
-});
 	
   // =================================================================
   // 今後、新しい変換ロジックをここに追加できます

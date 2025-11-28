@@ -157,7 +157,7 @@ const ShapeRenderer = ({ shape }: { shape: Shape }) => {
 			// 1. 角度を0〜360度の範囲に正規化する
 			const normalizedStart = mathMod(startAngle, 360);
 			const normalizedEnd = mathMod(endAngle, 360);
-
+			
 			// 2. 差分を計算する
 			// endAngleがstartAngleより大きい場合も、小さい場合も正しく処理されます。
 			let angleDifference = normalizedEnd - normalizedStart;
@@ -341,6 +341,13 @@ export const ImageGenerator = () => {
 				'arc', 
 				'angle', 
         'circle',
+        'ellipse',
+        'ellipsoid_slice',
+				'ellipsoid_slice_polar',
+				'ellipse_in_ellipse',
+				'ellipse_in_ellipse_polar',
+				'arc_fit_ellipse',
+				'arc_fit_ellipse_polar',
 				'rect', 
       ],
     });

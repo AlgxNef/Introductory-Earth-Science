@@ -21,16 +21,28 @@ export function ExerciseAccordion({ questionHtml, answerHtml }: Props) {
 // Xは半角数字
 // キャプチャグループ1: 解法X (例: 解法1)
 const h5SolutionRegex = /<h5>(解法\d+)<\/h5>/g;
-
 answerHtml = answerHtml.replace(h5SolutionRegex, (match, innerContent) => {
-    // innerContent は "解法1", "解法2" など
-
-    // 適用する Tailwind CSS クラス
-    // 外部のコンテンツと区別するために、左ボーダーと背景色を適用
     const hClasses = "bg-white border-1 border-gray-500 w-fit px-2 mb-1 rounded-full";
     // 全体を新しい<div>構造で囲んで返す
     return `<h5 class="${hClasses}">${innerContent}</h5>`;
 });
+
+
+  // 1. <figure>タグにスタイルを適用する正規表現
+  const figureRegex = /<figure>/g;
+  const figureClasses = "my-6 flex flex-col items-center"; // 上下のマージン、子要素を中央揃え
+  answerHtml = answerHtml.replace(figureRegex, `<figure class="${figureClasses}">`);
+
+  // 2. <figure>内の<img>タグにスタイルを適用する正規表現
+  // <figure>の中にある<img>だけをターゲットにする
+  const imgInFigureRegex = /(<figure[^>]*>[\s\S]*?<img)([^>]*>[\s\S]*?<\/figure>)/g;
+  const imgClasses = "max-w-full h-auto max-h-70"; 
+  // ↑ 最大幅100%, 高さ自動, 最大高さ(max-h-70), 角丸, 影, ボーダー, 白背景
+  answerHtml = answerHtml.replace(imgInFigureRegex, (match, p1, p2) => {
+    // p1: <figure...<img の部分
+    // p2: >...</figure> の部分
+    return `${p1} class="${imgClasses}" ${p2}`;
+  });
 
   return (
     <div className="prose lg:prose-xl max-w-none prose-h3:text-lg prose-h3:font-semibold prose-h4:text-base prose-h4:font-semibold">
