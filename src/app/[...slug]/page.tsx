@@ -91,11 +91,11 @@ function transformQuestions(html: string): string {
           ${headerHtml}
           <div class="flex flex-col md:flex-row gap-4 mt-2">
             <!-- 左カラム：テキスト -->
-            <div class="w-full md:w-[70%] lg:w-[80%]">
+            <div class="w-full md:w-[70%]">
               ${textOnlyHtml}
             </div>
             <!-- 右カラム：画像 -->
-            <div class="w-full md:w-[30%] lg:w-[20%]">
+            <div class="w-full md:w-[30%]">
               ${extractedImages.join("")}
             </div>
           </div>
