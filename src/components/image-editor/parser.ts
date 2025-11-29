@@ -3,7 +3,7 @@ import { vec3, mat4 } from 'gl-matrix';
 // --- 図形オブジェクトの型定義 ---
 export interface Shape {
 	id: number;
-  type: 'ellipse' | 'circle' | 'rect' | 'arrow' | 'label' | 'axis2d' | 'arc' | 'angle' | 'line' | 'polar_arrow' | 'polar_line' | 'ellipsoid_slice' | 'ellipsoid_slice_polar' | 'ellipse_in_ellipse' | 'ellipse_in_ellipse_polar' |  'arc_fit_ellipse' | 'arc_fit_ellipse_polar' | 'unknown';
+  type: 'ellipse' | 'circle' | 'rect' | 'arrow' | 'label' | 'axis2d' | 'arc' | 'angle' | 'line' | 'polar_arrow' | 'polar_line' | 'ellipsoid_slice' | 'ellipsoid_slice_polar' | 'ellipse_in_ellipse' | 'ellipse_in_ellipse_polar' |  'arc_fit_ellipse' | 'arc_fit_ellipse_polar' | 'dimension_line' | 'path' | 'unknown';
   props: any;
 	visible: boolean;
 	boundingBox: { minX: number; minY: number; maxX: number; maxY: number };
@@ -101,6 +101,131 @@ const calculateSx = (params: SxCalculationParams): number => {
   return Math.sqrt(sxSquared);
 };
 
+type Point = {
+  x: number;
+  y: number;
+};
+
+interface CalculateLabelPositionParams {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  controlPoint1: Point;
+  controlPoint2: Point;
+  textOffset: number;
+}
+
+/**
+ * 始点・終点の中心と、ベジエ曲線の中心(t=0.5)を結んだ直線の延長線上の座標を計算する関数
+ */
+export const calculateBezierLabelPosition = ({
+  x1,
+  y1,
+  x2,
+  y2,
+  controlPoint1,
+  controlPoint2,
+  textOffset,
+}: CalculateLabelPositionParams): Point => {
+  // 1. 直線の中心点 (Midpoint of the linear segment)
+  const linearMidX = (x1 + x2) / 2;
+  const linearMidY = (y1 + y2) / 2;
+
+  // 2. ベジエ曲線の中心点 (t=0.5)
+  // 3次ベジエ曲線 B(t) = (1-t)^3*P0 + 3(1-t)^2*t*P1 + 3(1-t)*t^2*P2 + t^3*P3
+  // t=0.5 のとき、係数はそれぞれ 0.125, 0.375, 0.375, 0.125 となります。
+  const t = 0.5;
+  const mt = 1 - t; // (1-t)
+  
+  // 係数計算（ハードコードで 0.125, 0.375... としても良いですが、明示的に計算しています）
+  const c0 = mt * mt * mt;       // (1-t)^3
+  const c1 = 3 * mt * mt * t;    // 3(1-t)^2 * t
+  const c2 = 3 * mt * t * t;     // 3(1-t) * t^2
+  const c3 = t * t * t;          // t^3
+
+  const bezierMidX = c0 * x1 + c1 * controlPoint1.x + c2 * controlPoint2.x + c3 * x2;
+  const bezierMidY = c0 * y1 + c1 * controlPoint1.y + c2 * controlPoint2.y + c3 * y2;
+
+  // 3. 直線の中心からベジエ曲線の中心に向かうベクトル (Vector M -> P)
+  const vx = bezierMidX - linearMidX;
+  const vy = bezierMidY - linearMidY;
+
+  // ベクトルの長さ
+  const length = Math.sqrt(vx * vx + vy * vy);
+
+  // 例外処理: 直線とベジエ曲線が完全に重なっている（平坦）場合
+  // 方向が定まらないため、ベジエ曲線の中心（＝直線の中心）をそのまま返します
+  if (length === 0) {
+    return { x: bezierMidX, y: bezierMidY };
+  }
+
+  // 4. 単位ベクトル化してオフセットを加算
+  // ベジエ曲線の頂点 (bezierMid) から、外側 (ベクトル方向) へ textOffset 分進める
+  const unitX = vx / length;
+  const unitY = vy / length;
+
+  return {
+    x: bezierMidX + unitX * textOffset,
+    y: bezierMidY + unitY * textOffset,
+  };
+};
+
+// ベジェ曲線の制御点を計算するヘルパー関数
+const getControlPoints = (x1: number, y1: number, x2: number, y2: number, bend: number, textOffset: number) => {
+	
+	const aveX = (x1 + x2)/2;
+	const aveY = (y1 + y2)/2;
+	
+	const rel_p1x = x1 - aveX;
+	const rel_p1y = y1 - aveY;
+	const rel_p2x = x2 - aveX;
+	const rel_p2y = y2 - aveY;
+	
+	const angle1 = Math.atan2(rel_p1y, rel_p1x);
+	const angle2 = Math.atan2(rel_p2y, rel_p2x);
+	
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+	
+	const length = Math.sqrt(dx * dx + dy * dy) / 4;
+  const cX1 = length * Math.cos(angle2 + (bend / 180 * Math.PI)) + x1;
+  const cY1 = length * Math.sin(angle2 - (bend / 180 * Math.PI)) + y1;
+  const cX2 = length * Math.cos(angle1 + (bend / 180 * Math.PI)) + x2;
+  const cY2 = length * Math.sin(angle1 + (bend / 180 * Math.PI)) + y2;
+	
+	//テキストの位置
+	const rel_textX = 2 * length;
+	const rel_textY = 2 * length * Math.tan(bend / 180 * Math.PI);
+	const radius_text = Math.sqrt(rel_textX * rel_textX + rel_textY * rel_textY);
+  const textX = radius_text * Math.cos(angle2 + (bend / 180 * Math.PI)) + x1;
+  const textY = radius_text * Math.sin(angle2 - (bend / 180 * Math.PI)) + y1;
+	
+	
+  const controlPoint1 = {
+    x: cX1,
+    y: cY1,
+  };
+  const controlPoint2 = {
+    x: cX2,
+    y: cY2,
+  };
+	const labelPos = calculateBezierLabelPosition({
+		x1,
+		y1,
+		x2,
+		y2,
+		controlPoint1,
+		controlPoint2,
+		textOffset,
+	});
+	
+  const textPoint = {
+    x: labelPos.x,
+    y: labelPos.y,
+  };
+  return { controlPoint1, controlPoint2, textPoint };
+};
 
 export const commandDefaults: Record<string, string> = {
   label: 'label(text="x", x=0, y=0, size=16)',
@@ -119,6 +244,7 @@ export const commandDefaults: Record<string, string> = {
   ellipse_in_ellipse_polar: 'ellipse_in_ellipse_polar(cx=0, cy=0, rx=100, ry=100, arg=45, icdy=5, iry=15)',
   arc_fit_ellipse: 'arc_fit_ellipse(cx=0, cy=0, rx=100, ry=100, px=71.4, py=71.4, icdy=5, iry=15, side="front")',
   arc_fit_ellipse_polar: 'arc_fit_ellipse_polar(cx=0, cy=0, rx=100, ry=100, px=71.4, py=71.4, icdy=5, iry=15, side="front")',
+	dimension_line: 'dimension_line(p1x=-80, p1y=0, p2x=80, p2y=0, side="up", bend=0.4, text="直径 160")'
 };
 
 // --- コマンドごとのパーサーを定義 ---
@@ -482,6 +608,7 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
           case 'endAngle': props.endAngle = parseFloat(value); break;     // 終点角 (度)
           case 'stroke': props.stroke = value.replace(/"/g, ''); break;
           case 'strokeWidth': props.strokeWidth = parseFloat(value); break;
+          case 'strokeDasharray': props.strokeDasharray = value.replace(/"/g, ''); break;
           case 'opacity': props.opacity = parseFloat(value); break;
           case 'visible': visible = value.toLowerCase() === 'true'; break;
         }
@@ -965,11 +1092,10 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
 					// Inner ellipse definition
 					case 'icdy': props.icdy = parseFloat(value); break;
 					case 'iry': props.iry = parseFloat(value); break;
-					
-					case 'side': props.side = value.replace(/"/g, ''); break;
 					// Style
 					case 'stroke': props.stroke = value.replace(/"/g, ''); break;
 					case 'strokeWidth': props.strokeWidth = parseFloat(value); break;
+					case 'strokeDasharray': props.strokeDasharray = value.replace(/"/g, ''); break;
 					case 'fill': props.fill = value.replace(/"/g, ''); break;
 					case 'side': props.side = value.replace(/"/g, ''); break;
 					case 'visible': 
@@ -1057,6 +1183,7 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
 				
 				stroke: props.stroke || 'black',
 				strokeWidth: props.strokeWidth || 0.5,
+				strokeDasharray: props.strokeDasharray || '',
 				fill: props.fill || 'none',
 				visible: props.visible || 'true',
 			};
@@ -1087,10 +1214,10 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
 					case 'icdy': props.icdy = parseFloat(value); break;
 					case 'iry': props.iry = parseFloat(value); break;
 					
-					case 'side': props.side = value.replace(/"/g, ''); break;
 					// Style
 					case 'stroke': props.stroke = value.replace(/"/g, ''); break;
 					case 'strokeWidth': props.strokeWidth = parseFloat(value); break;
+					case 'strokeDasharray': props.strokeDasharray = value.replace(/"/g, ''); break;
 					case 'fill': props.fill = value.replace(/"/g, ''); break;
 					case 'side': props.side = value.replace(/"/g, ''); break;
 					case 'visible': 
@@ -1115,6 +1242,7 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
 			let modifiedArgs = `cx=${props.cx}, cy=${props.cy}, rx=${props.rx}, ry=${props.ry}, px=${px}, py=${py}`;
 
 			// 共通の引数を追加
+			if (props.strokeDasharray) modifiedArgs += `, strokeDasharray=${props.strokeDasharray}`;
 			if (props.icdy) modifiedArgs += `, icdy=${props.icdy}`;
 			if (props.iry) modifiedArgs += `, iry=${props.iry}`;
 			if (props.side) modifiedArgs += `, side=${props.side}`;
@@ -1126,6 +1254,82 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
 
 			// 4. 構築した引数で、既存のellipsoid_sliceパーサーを呼び出す
 			return commandParsers.arc_fit_ellipse(modifiedArgs, unitMode, canvasSize);
+  },
+
+  dimension_line: (args, unitMode, canvasSize) => {
+    const props: any = {};
+    let visible = true;
+		args.split(',').forEach(arg => {
+			const [key, value] = arg.trim().split('=').map(s => s.trim());
+			if (key && value !== undefined) {
+				switch (key) {
+					case 'p1x': props.p1x = parseFloat(value); break;
+					case 'p1y': props.p1y = parseFloat(value) * -1; break; // Y軸反転
+					case 'p2x': props.p2x = parseFloat(value); break;
+					case 'p2y': props.p2y = parseFloat(value) * -1; break; // Y軸反転
+					
+					case 'side': props.side = value.replace(/"/g, ''); break; // "up" or "down"
+					case 'bend': props.bend = parseFloat(value); break; // 曲がり具合
+					case 'text': props.text = value.replace(/"/g, ''); break;
+          case 'textSize': props.textSize = parseFloat(value); break;
+          case 'textOffset': props.textOffset = parseFloat(value); break;
+					
+					// Style
+					case 'stroke': props.stroke = value.replace(/"/g, ''); break;
+					case 'strokeWidth': props.strokeWidth = parseFloat(value); break;
+					case 'strokeDasharray': props.strokeDasharray = value.replace(/"/g, ''); break;
+					case 'visible': visible = value.toLowerCase() === 'true'; break;
+				}
+			}
+		});
+			
+    // デフォルト値
+    const p1 = { x: props.p1x ?? 0, y: props.p1y ?? 0 };
+    const p2 = { x: props.p2x ?? 100, y: props.p2y ?? 0 };
+    const side = props.side ?? 'up';
+    const bend = props.bend ?? 5; // 曲がり具合（角度）
+    const text = props.text;
+    const textSize = props.textSize ?? 20;
+    const textOffset = props.textOffset ?? 10;
+    if (!visible) return [];
+
+    // sideに応じてbendの符号を変える
+    const signedBend = side === 'up' ? bend : -bend;
+
+    // 1. ベジェ曲線の制御点を計算
+    const { controlPoint1, controlPoint2, textPoint } = getControlPoints(p1.x, p1.y, p2.x, p2.y, signedBend, textOffset);
+    
+    // 2. 派生する図形を格納する配列
+    const generatedShapes: Shape[] = [];
+		// 3. 引き出し線のカーブ部分 (pathで描画)
+    const d = `M ${p1.x} ${p1.y} C ${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${p2.x} ${p2.y}`;
+    
+    const pathProps = {
+      d: d,
+      fill: 'none',
+      stroke: props.stroke || 'black',
+      strokeWidth: props.strokeWidth ?? 0.2,
+      strokeDasharray: props.strokeDasharray || '',
+      opacity: props.opacity,
+    };
+
+    // Bounding Boxの計算（始点と終点と制御点を含む）
+    const boundingBox = {
+      minX: Math.min(p1.x, p2.x, controlPoint1.x),
+      minY: Math.min(p1.y, p2.y, controlPoint1.y),
+      maxX: Math.max(p1.x, p2.x, controlPoint1.x),
+      maxY: Math.max(p1.y, p2.y, controlPoint1.y),
+    };
+    
+    generatedShapes.push({ id: nextId++, type: 'path', props: pathProps, visible: true, boundingBox });
+
+    // 4. テキストラベル (labelを内部的に呼び出す)
+    if (text) {
+      const labelCommand = `text="${text}", x=${textPoint.x}, y=${-textPoint.y}, size=${textSize}, color="${props.stroke || 'black'}"`;
+      generatedShapes.push(commandParsers.label(labelCommand, 'absolute', canvasSize) as Shape);
+    }
+    
+    return generatedShapes;
   },
 	
 	// 今後、rectコマンドを追加する場合

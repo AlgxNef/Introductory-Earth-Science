@@ -27,37 +27,91 @@ export async function generateStaticParams() {
 
 // 設問部分のHTMLを変換する関数
 function transformQuestions(html: string): string {
-  // <h4>問◯</h4>（全角・半角数字対応）を開始点とする。
-  // そこから、次に出現する <h4>, <h3>, <h2>, </div> または文字列の終端の
-  // 直前までを一つの問題のコンテンツとしてマッチさせる正規表現。
-  //
-  // 詳細:
-  // (<h4>(問[０-９0-9]+)</h4>) - キャプチャグループ1 & 2
-  //   - <h4>問◯</h4> の部分をマッチさせ、"問◯" の部分をグループ2としてキャプチャする。
-  //   - 数字は全角・半角の両方に対応 ([０-９0-9]+)。
-  // ([\s\S]*?) - キャプチャグループ3
-  //   - 問題の本文。改行を含むあらゆる文字にマッチする。
-  //   - `*?` は非貪欲マッチ（non-greedy）を意味し、可能な限り短い文字列にマッチさせる。
-  // (?=<h[2-4]>|</div>|$) - 肯定的先読み
-  //   - この正規表現の核となる部分。
-  //   - `(?=...)` は、その位置に `...` のパターンが続くことを確認するが、`...` 自体はマッチ結果に含めない。
-  //   - `<h[2-4]>` : <h4>, <h3>, <h2> のいずれかの開始タグ
-  //   - `</div>` : divの終了タグ
-  //   - `$` : 文字列の終端
-  //   - これらが出現する直前で、キャプチャグループ3のマッチを終了させる。
   const questionRegex = /(<h4>(問[０-９0-9]+)<\/h4>)([\s\S]*?)(?=<h[2-4]>|<\/div>|$)/g;
 
-  // 置換後のHTML構造。
-  // 問題の本文（$3）は、<p>だけでなく<ul>や<ol>など複数の要素を含む可能性があるため、
-  // <p>タグではなく<div>タグで囲むように変更している。
-  const replacement = `
-    <div class="flex items-start mt-4 pl-4">
-      <div class="mr-4 font-serif font-medium">$2</div>
-      <div class="flex-1">$3</div>
-    </div>
-  `;
+// $3（問の本文）の中で使う図版番号のカウンター
+  // ※ファイル全体で連番にする場合はこの変数をreplaceの外に出してください
+  let qFigCounter = 1;
 
-  return html.replace(questionRegex, replacement);
+  // Hタグ（ここではh4内のためh5, h6を想定）で分割するための正規表現
+  const sectionSplitRegex = /(?=<h[5-6])/g;
+  // 画像抽出用の正規表現
+  const imgRegex = /<p[^>]*>\s*<img\s+src="([^"]+)"[^>]*>\s*<\/p>/g;
+
+  return html.replace(questionRegex, (match, h4Tag, questionNum, contentBody) => {
+    // contentBody が $3 に相当します
+
+    // 1. コンテンツをHタグ（h5, h6等）区切りで分割
+    // ※もしHタグがない場合は全体が1つのセクションになります
+    const sections = contentBody.split(sectionSplitRegex);
+
+    const processedBody = sections.map((sectionContent: string) => {
+      if (!sectionContent.trim()) return "";
+
+      // ヘッダー(h5/h6)と本文を分離
+      let headerHtml = "";
+      let bodyHtml = sectionContent;
+      const headerMatch = sectionContent.match(/^(<h[5-6][^>]*>[\s\S]*?<\/h[5-6]>)([\s\S]*)$/i);
+
+      if (headerMatch) {
+        headerHtml = headerMatch[1];
+        bodyHtml = headerMatch[2];
+      }
+
+      // 2. 画像の抽出処理
+      const extractedImages: string[] = [];
+      const textOnlyHtml = bodyHtml.replace(imgRegex, (imgMatch, src) => {
+        const currentFigNum = qFigCounter++;
+        
+        // 画像HTMLの生成（ホバーなし、キャプションは図番号のみ）
+        extractedImages.push(`
+          <div class="mb-4">
+            <img src="${src}" class="w-full h-auto" />
+            <div class="text-center text-sm text-gray-600 mt-1 font-medium">図${currentFigNum}</div>
+          </div>
+        `);
+        return ""; // 本文から画像を削除
+      });
+
+      // 3. レイアウト構築
+      // 【変更点4】図がない場合は分割しない（元のHTMLをそのまま返す）
+      if (extractedImages.length === 0) {
+        return `
+          <div class="mb-4">
+            ${headerHtml}
+            ${bodyHtml}
+          </div>
+        `;
+      }
+
+      // 図がある場合は左右分割（左テキスト、右画像）
+      // 【変更点3】境界線（border）は削除
+      return `
+        <div class="mb-6">
+          ${headerHtml}
+          <div class="flex flex-col md:flex-row gap-4 mt-2">
+            <!-- 左カラム：テキスト -->
+            <div class="w-full md:w-[70%] lg:w-[80%]">
+              ${textOnlyHtml}
+            </div>
+            <!-- 右カラム：画像 -->
+            <div class="w-full md:w-[30%] lg:w-[20%]">
+              ${extractedImages.join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <div class="flex gap-4 items-start mt-4 pl-4">
+        <div class="font-serif font-medium">${questionNum}</div>
+        <div class="flex-1">
+          ${processedBody}
+        </div>
+      </div>
+    `;
+  });
 }
 
 

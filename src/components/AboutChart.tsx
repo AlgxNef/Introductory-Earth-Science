@@ -1007,7 +1007,8 @@ const nlinkElementsCommonGeo = nationalUniversityCommonGeo.map(([name, url], ind
 
         {/* フッター */}
         <footer className="mt-12 text-center text-sm text-gray-500 ">
-          <p>AlgxNef</p>
+          <p className="font-[Roboto]">© 2025 AlgxNef</p>
+          <p className="text-xs">The 'knowing' that perceives order in the world is impious. Man emerged at last into the chaos, a being in it. Lift this fog. AlgxNef.</p>
         </footer>
       </div>
     </div>

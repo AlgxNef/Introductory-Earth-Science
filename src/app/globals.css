@@ -108,3 +108,21 @@ rt{
 .footnotes li {
   @apply mb-2;
 }
+
+@media print {
+  /* 見出しや重要なセクション内での改ページを防ぐ */
+  h2, h3, .no-break-inside {
+		break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important; /* 最新のブラウザ向けの別名プロパティも併記 */
+  }
+
+  /*
+    オプション: 見出しの直後に次のページが始まらないように、
+    見出しの後に一定行のコンテンツが続くことを保証する設定も有効です。
+    (Firefoxでは未サポートの場合があります)
+  */
+  h2 + p, h3 + p {
+    page-break-before: auto !important;
+  }
+}

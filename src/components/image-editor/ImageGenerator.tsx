@@ -184,7 +184,13 @@ const ShapeRenderer = ({ shape }: { shape: Shape }) => {
         />
       );
     }
-		
+		case 'path':
+      return (
+        <path
+          {...shape.props}
+        />
+      );
+			
     default:
       return null;
   }
@@ -208,6 +214,7 @@ export const ImageGenerator = () => {
 	const editorRef = useRef<any>(null);
 	const monacoRef = useRef<any>(null);
 	const svgRef = useRef<SVGSVGElement>(null);
+  const gridRef = useRef<SVGGElement>(null);
 	
   useEffect(() => {
     // ライブラリデータを読み込んでstateにセット
@@ -358,13 +365,19 @@ export const ImageGenerator = () => {
       console.error("SVG element not found.");
       return;
     }
+			
+		const excludedElements: Element[] = [];
+		// showGridがtrueで、かつgridRef.currentが存在する場合のみ、配列に追加
+		if (showGrid && gridRef.current) {
+			excludedElements.push(gridRef.current);
+		}
     
     const filename = `science-to-img-${new Date().getTime()}`;
 
     if (format === 'svg') {
-      exportAsSVG(svgRef.current, filename);
+			exportAsSVG(svgRef.current, filename, excludedElements);
     } else {
-      exportAsRaster(svgRef.current, filename, format);
+			exportAsRaster(svgRef.current, filename, format, excludedElements);
     }
   };
 	
@@ -545,7 +558,7 @@ export const ImageGenerator = () => {
           preserveAspectRatio="xMidYMid meet"
         >
           {showGrid && (
-            <g id="grid-area">
+            <g ref={gridRef}>
               <Grid viewBox={viewBox} unitMode={unitMode} />
             </g>
           )}

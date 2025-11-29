@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-// ★★★ ステップ1で作成したクライアントコンポーネントをインポート ★★★
 import GeoscienceEducationAnalysis from '@/components/AboutChart';
 
-// サーバーコンポーネントなので、metadataをエクスポートできる
 export const metadata: Metadata = {
   title: 'このサイトについて',
 };

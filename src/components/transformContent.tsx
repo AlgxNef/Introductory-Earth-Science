@@ -1,4 +1,6 @@
+"use client"
 import React from 'react';
+import { useEffect } from 'react';
 
 /**
  * 整数を丸付き文字に変換する関数
@@ -242,52 +244,115 @@ transformed = transformed.replace(targetTagsRegex, (match) => {
   });
 });
 
+// --- 実装開始 ---
 
-  // =================================================================
-  // 【修正】変換ロジック3: <p>内の<img>を検出し、テキストと画像を分離してflexレイアウトに変換
-  // 例: <p class="... A ...">テキスト <img src="..."></p>
-  // ↓
-  // <div class="flex items-start">
-  //   <div class="w-[80%] pr-4"><p class="... A ...">テキスト</p></div>
-  //   <div class="w-[20%]"><img src="..."></div>
-  // </div>
-  // =================================================================
-  const pWithImgRegex = /<p([^>]*)>(.*?)<\/p>/gs; // 's'フラグで改行を含む内容にマッチ
+// 1. 図版の通し番号用カウンタ
+let figCounter = 1;
 
-  transformed = transformed.replace(pWithImgRegex, (match, pAttributes, innerContent) => {
-    const imgTagRegex = /<img[^>]*>/g;
+// 2. セクションごとの分割
+// <h3>の手前で分割します
+const sections = transformed.split(/(?=<h3)/g);
 
-    // pタグ内にimgタグが含まれているかチェック
-    if (imgTagRegex.test(innerContent)) {
-      // マッチしたimgタグをすべて抽出
-      const imgTags = innerContent.match(imgTagRegex);
-      const allImages = imgTags ? imgTags.join('') : '';
+const processedSections = sections.map((sectionContent) => {
+  // 空白のみの場合はスキップ
+  if (!sectionContent.trim()) return "";
 
-      // imgタグを取り除いた残りのコンテンツ（テキストや他のHTMLタグ）
-      const textContent = innerContent.replace(imgTagRegex, '').trim();
+  // A. H3タグとそれ以外の本文(body)を分離する
+  // 先頭が <h3...>...</h3> で始まっているかチェック
+  let headerHtml = "";
+  let bodyHtml = sectionContent;
+  
+  // 正規表現: 行頭にあるh3タグとその中身をキャプチャ($1)、それ以降を($2)とする
+  const headerMatch = sectionContent.match(/^(<h3[^>]*>[\s\S]*?<\/h3>)([\s\S]*)$/i);
+  
+  if (headerMatch) {
+    headerHtml = headerMatch[1];
+    bodyHtml = headerMatch[2];
+  }
 
-      // 新しいflexレイアウトのHTMLを構築
-      // 元の<p>タグが持っていた属性(例: class="...")を新しい<p>タグに引き継ぐ
-      return `<div class="flex items-start my-2">
-  <div class="w-[75%] pr-4  flex flex-col justify-between leading-7" style="height: -webkit-fill-available;"><p${pAttributes}>${textContent}</p></div>
-  <div class="w-[25%]">${allImages}</div>
-</div>`;
+  // B. 除外設定（「引用・参考文献」「画像引用元」）のチェック
+  // これらの単語がヘッダーに含まれる場合、レイアウト分割せずそのまま返す
+  if (headerHtml.includes("引用・参考文献") || headerHtml.includes("画像引用元") || headerHtml==="") {
+    return `
+      <div class="my-4">
+        ${headerHtml}
+        <div class="px-2 mt-4">
+          ${bodyHtml}
+        </div>
+      </div>
+    `;
+  }
+
+  // --- ここから通常セクション（70:30分割）の処理 ---
+
+  // C. 画像の抽出処理
+  const extractedImages: string[] = [];
+
+  // 本文(bodyHtml)から画像を抜き出し、右カラム用に整形
+  const contentText = bodyHtml.replace(
+    /<p[^>]*>\s*<img\s+src="([^"]+)"\s+alt="([^"]+)"[^>]*>\s*<\/p>/g,
+    (match, src, alt) => {
+      const currentFigId = `fig-${figCounter}`;
+      const currentFigNum = figCounter;
+      figCounter++;
+
+      // 右カラム用画像HTML
+      const imageHtml = `
+        <div class="mb-8" id="${currentFigId}">
+          <img src="${src}" alt="${alt}" class="w-full h-auto border border-gray-200" />
+          <div class="mt-2 text-sm text-gray-600 font-medium leading-snug">
+            <span class="inline-block bg-gray-100 text-gray-800 px-1 rounded mr-1">図${currentFigNum}</span>
+            ${alt}
+          </div>
+        </div>
+      `;
+      extractedImages.push(imageHtml);
+      
+      return ""; // 本文からは削除
     }
-    
-    // imgタグが含まれていないpタグは、そのまま変更せずに返す
-    return match;
-  });
-	
-	// =================================================================
-  // 【追加】変換ロジック4: <figure>タグにクラスを追加
-  // <figure> -> <figure class="mt-auto text-sm">
-  // =================================================================
-  transformed = transformed.replace(/<figure>/g, '<figure class="mt-auto text-sm text-right">');
-	
-	
-  // =================================================================
-  // 今後、新しい変換ロジックをここに追加できます
-  // =================================================================
+  );
+
+  const rightColumnHtml = extractedImages.join("");
+
+  // D. レイアウト構築
+  // headerHtml（100%幅）の下に、flexコンテナ（70%:30%）を配置
+  return `
+    <div class="my-4 pb-8 last:border-0 last:pb-0">
+      ${headerHtml}
+      <section class="flex flex-col md:flex-row gap-6 mt-4">
+        <!-- 左カラム: 本文 (70%) -->
+        <div class="w-full md:w-[70%]">
+          ${contentText}
+        </div>
+        
+        <!-- 右カラム: 画像エリア (30%) -->
+        <!-- 画像がなくても領域は確保（要件通り） -->
+        <div class="w-full md:w-[30%] flex flex-col border-t md:border-t-0 md:border-l border-gray-200 pt-4 md:pt-0 md:pl-4">
+          ${rightColumnHtml}
+        </div>
+      </section>
+    </div>
+  `;
+});
+
+// 3. 文字列結合
+transformed = processedSections.join("");
+
+// 4. リンク作成 [図N] -> span
+transformed = transformed.replace(
+  /\[図(\d+)\]/g,
+  '<span class="js-fig-ref mx-1 font-[Noto_Sans_JP] font-semibold cursor-pointer bg-gray-200 text-gray-800 px-1 rounded hover:bg-gray-300 transition-colors" data-fig-target="fig-$1">図$1</span>'
+);
+
+// 5. ホバー用Div追加
+transformed += `
+  <div id="fig-preview-tooltip" class="fixed z-50 pointer-events-none opacity-0 transition-opacity duration-200 bg-white p-2 border border-gray-300 shadow-xl rounded-lg w-64 hidden">
+    <img id="fig-preview-img" src="" class="w-full h-auto mb-1 rounded" />
+    <p id="fig-preview-caption" class="text-xs text-center font-bold text-gray-700"></p>
+  </div>
+`;
+
+// --- 実装終了 ---
 
   return transformed;
 };
@@ -298,6 +363,80 @@ transformed = transformed.replace(targetTagsRegex, (match) => {
  */
 export const TransformedContent: React.FC<{ htmlContent: string }> = ({ htmlContent }) => {
   const transformedHtml = transformContent(htmlContent);
+
+  useEffect(() => {
+    // 1. 図へのスクロール機能 (クリックイベント)
+    const links = document.querySelectorAll('.js-fig-ref');
+    const handleScroll = (e: Event) => {
+      const targetId = (e.currentTarget as HTMLElement).dataset.figTarget;
+      const targetElement = document.getElementById(targetId || '');
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    };
+
+    // 2. ホバープレビュー機能
+    const tooltip = document.getElementById('fig-preview-tooltip');
+    const tooltipImg = document.getElementById('fig-preview-img') as HTMLImageElement;
+    const tooltipCap = document.getElementById('fig-preview-caption');
+
+    const handleMouseEnter = (e: MouseEvent) => {
+      const targetId = (e.currentTarget as HTMLElement).dataset.figTarget;
+      const targetElement = document.getElementById(targetId || '');
+      
+      if (tooltip && targetElement && tooltipImg && tooltipCap) {
+        // 元の画像のsrcとaltを取得
+        const originalImg = targetElement.querySelector('img');
+        if (originalImg) {
+          tooltipImg.src = originalImg.src;
+          tooltipCap.textContent = originalImg.alt;
+          
+          // ツールチップを表示
+          tooltip.classList.remove('hidden');
+          // 少し遅延させてopacityを変えることでフェードインさせる
+          requestAnimationFrame(() => {
+             tooltip.classList.remove('opacity-0');
+          });
+        }
+      }
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (tooltip) {
+        // マウスの右下に追従させる
+        const x = e.clientX + 15;
+        const y = e.clientY + 15;
+        tooltip.style.left = `${x}px`;
+        tooltip.style.top = `${y}px`;
+      }
+    };
+
+    const handleMouseLeave = () => {
+      if (tooltip) {
+        tooltip.classList.add('opacity-0');
+        // フェードアウト後にhiddenにする（簡易的にはsetTimeout使用）
+        setTimeout(() => tooltip.classList.add('hidden'), 200);
+      }
+    };
+
+    // イベントリスナーの登録
+    links.forEach(link => {
+      link.addEventListener('click', handleScroll);
+      link.addEventListener('mouseenter', handleMouseEnter as EventListener);
+      link.addEventListener('mousemove', handleMouseMove as EventListener);
+      link.addEventListener('mouseleave', handleMouseLeave);
+    });
+
+    // クリーンアップ関数
+    return () => {
+      links.forEach(link => {
+        link.removeEventListener('click', handleScroll);
+        link.removeEventListener('mouseenter', handleMouseEnter as EventListener);
+        link.removeEventListener('mousemove', handleMouseMove as EventListener);
+        link.removeEventListener('mouseleave', handleMouseLeave);
+      });
+    };
+  }, [transformedHtml]);
 
   return (
     <div dangerouslySetInnerHTML={{ __html: transformedHtml }} />
