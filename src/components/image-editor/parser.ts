@@ -58,7 +58,6 @@ const getDistance = (p1: {x: number, y: number}, p2: {x: number, y: number}) =>
 const getAngle = (p1: {x: number, y: number}, p2: {x: number, y: number}) => 
   Math.atan2(p2.y - p1.y, p2.x - p1.x);
 
-
 /**
  * outerとinnerの座標を基に、2点を結ぶ線分がy軸となす角を計算する
  * @param {object} outer - 外側の座標を含むオブジェクト
@@ -74,7 +73,6 @@ const calculateAngleWithYAxisRadians = (outer: { cx: number, cy: number }, inner
     const angleY = angleX - Math.PI / 2; 
     return angleY;
 };
-
 
 /**
  * 2本の接線l1, l2に接し、中心(dx, dy), y軸半径syを持つ楕円のx軸半径sxを計算します。
@@ -335,6 +333,9 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
     props.r = props.r ?? (unitMode === 'relative' ? 0.1 : 10);
     props.cx = props.cx ?? 0;
     props.cy = props.cy ?? 0;
+    props.fill = props.fill ?? 'none';
+    props.stroke = props.stroke ?? 'black';
+    props.strokeWidth = props.strokeWidth ?? 1;
 		
     // ★★★ 単位モードに応じて値を変換 ★★★
     let absProps = { ...props };
@@ -405,10 +406,10 @@ const commandParsers: Record<string, (args: string, unitMode: UnitMode, canvasSi
     }
 
     const boundingBox = {
-      minX: absProps.cx - absProps.r,
-      minY: absProps.cy - absProps.r,
-      maxX: absProps.cx + absProps.r,
-      maxY: absProps.cy + absProps.r,
+      minX: absProps.cx - absProps.rx,
+      minY: absProps.cy - absProps.ry,
+      maxX: absProps.cx + absProps.rx,
+      maxY: absProps.cy + absProps.ry,
     };
     return { id: nextId++, type: 'ellipse', props: absProps, visible, boundingBox };
   },
